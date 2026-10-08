@@ -1,0 +1,854 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Red Kennedy · Autoorganización</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+:root {
+  --bg: #0b0c0f;
+  --panel: #141518;
+  --border: rgba(201,193,182,0.18);
+  --text: #f2ece3;
+  --muted: #8e877f;
+  --teal: #46d6d0;
+  --orange: #e89a6c;
+  --red: #d9824e;
+  --green: #8fd7c8;
+  --purple: #a276f2;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: Inter, system-ui, sans-serif;
+  overflow: hidden;
+  height: 100vh;
+}
+.app { display: flex; height: 100vh; }
+.sidebar {
+  width: 64px;
+  min-width: 64px;
+  background: #080c0c;
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 16px 0;
+  z-index: 100;
+}
+.brand-icon {
+  width: 36px; height: 36px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, var(--teal), #1a9d94);
+  display: grid; place-items: center;
+  color: #06110f;
+  font-size: 16px;
+  text-decoration: none;
+  margin-bottom: 20px;
+}
+.icon-nav { display: flex; flex-direction: column; gap: 8px; }
+.icon-nav-item {
+  width: 40px; height: 40px;
+  display: grid; place-items: center;
+  border-radius: 10px;
+  color: #859097;
+  text-decoration: none;
+  font-size: 15px;
+  transition: all 0.18s;
+}
+.icon-nav-item:hover, .icon-nav-item.active {
+  color: var(--teal);
+  background: rgba(70,214,208,0.1);
+}
+.main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+.topbar {
+  height: 52px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+  background: rgba(11,12,15,0.95);
+}
+.topbar-brand {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+}
+.topbar-brand i { color: var(--teal); margin-right: 8px; }
+.topbar-actions { display: flex; gap: 8px; }
+.icon-btn {
+  width: 32px; height: 32px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  display: grid; place-items: center;
+  transition: all 0.18s;
+}
+.icon-btn:hover { color: var(--teal); border-color: var(--teal); }
+.content {
+  flex: 1;
+  display: grid;
+  grid-template-columns: 1fr 300px;
+  overflow: hidden;
+}
+.canvas-wrap {
+  position: relative;
+  overflow: hidden;
+  background: radial-gradient(circle at 50% 45%, rgba(30,81,75,0.15), transparent 60%), #0b0c0f;
+}
+.canvas-wrap svg {
+  width: 100%;
+  height: 100%;
+  cursor: grab;
+}
+.canvas-wrap svg:active { cursor: grabbing; }
+.sidebar-right {
+  border-left: 1px solid var(--border);
+  background: var(--panel);
+  overflow-y: auto;
+  padding: 16px;
+}
+.panel {
+  background: #1a1b1e;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 14px;
+  margin-bottom: 12px;
+}
+.panel h3 {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--teal);
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.panel p {
+  font-size: 11px;
+  color: var(--muted);
+  line-height: 1.5;
+}
+.filter-group { margin-bottom: 12px; }
+.filter-group label {
+  display: block;
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--muted);
+  margin-bottom: 6px;
+}
+.filter-group select {
+  width: 100%;
+  padding: 6px 8px;
+  background: #111817;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--text);
+  font-size: 11px;
+}
+.filter-group input[type="range"] {
+  width: 100%;
+  accent-color: var(--teal);
+}
+.stats-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+.stat-card {
+  background: #111817;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 10px;
+  text-align: center;
+}
+.stat-card b {
+  display: block;
+  font-size: 20px;
+  color: var(--teal);
+  font-family: 'Space Grotesk', sans-serif;
+}
+.stat-card span {
+  font-size: 8px;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.node-details h4 {
+  font-size: 13px;
+  color: var(--text);
+  margin-bottom: 6px;
+}
+.node-details .node-type {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 9px;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+.node-details .node-type.dinamica { background: rgba(70,214,208,0.15); color: var(--teal); }
+.node-details .node-type.actor { background: rgba(232,154,108,0.15); color: var(--orange); }
+.node-details .node-rol {
+  font-size: 10px;
+  margin: 4px 0;
+  padding: 4px 8px;
+  border-radius: 4px;
+  background: #111817;
+}
+.node-details .node-rol.habilita { border-left: 3px solid var(--teal); }
+.node-details .node-rol.impide { border-left: 3px solid var(--red); }
+.node-details .node-rol.mixta { border-left: 3px solid var(--orange); }
+.node-details .node-rol.bottom-up { border-left: 3px solid var(--green); }
+.node-details .node-rol.top-down { border-left: 3px solid var(--purple); }
+.connections-list {
+  margin-top: 8px;
+  padding-left: 0;
+  list-style: none;
+}
+.connections-list li {
+  font-size: 10px;
+  padding: 4px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+  color: var(--muted);
+}
+.connections-list li:last-child { border-bottom: none; }
+.connections-list li i {
+  margin-right: 6px;
+  font-size: 8px;
+}
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 8px;
+}
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 9px;
+  color: var(--muted);
+}
+.legend-swatch {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+.zoom-controls {
+  position: absolute;
+  bottom: 16px;
+  right: 16px;
+  display: flex;
+  gap: 6px;
+  z-index: 10;
+}
+.zoom-controls button {
+  width: 36px;
+  height: 36px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: rgba(11,12,15,0.9);
+  color: var(--teal);
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.18s;
+}
+.zoom-controls button:hover {
+  background: rgba(70,214,208,0.15);
+  border-color: var(--teal);
+}
+.tooltip {
+  position: fixed;
+  z-index: 1000;
+  display: none;
+  max-width: 280px;
+  padding: 12px 14px;
+  background: #1a1b1e;
+  border: 1px solid rgba(70,214,208,0.4);
+  border-radius: 10px;
+  box-shadow: 0 12px 30px rgba(0,0,0,0.5);
+  pointer-events: none;
+}
+.tooltip.visible { display: block; }
+.tooltip strong {
+  display: block;
+  color: var(--teal);
+  font-size: 12px;
+  margin-bottom: 4px;
+}
+.tooltip span {
+  font-size: 10px;
+  color: var(--muted);
+  line-height: 1.4;
+}
+.network-node { cursor: pointer; }
+.network-node circle {
+  transition: all 0.25s;
+}
+.network-node:hover circle {
+  filter: brightness(1.3) drop-shadow(0 0 8px currentColor);
+}
+.network-node.selected circle {
+  stroke: #fff !important;
+  stroke-width: 4 !important;
+  filter: drop-shadow(0 0 12px #fff);
+}
+.network-node.dimmed { opacity: 0.15; }
+.network-edge {
+  transition: all 0.25s;
+}
+.network-edge.dimmed { opacity: 0.05; }
+.network-edge.highlight {
+  stroke: #fff !important;
+  stroke-width: 3 !important;
+  opacity: 1 !important;
+  filter: drop-shadow(0 0 4px #fff);
+}
+.search-box {
+  width: 100%;
+  padding: 8px 10px;
+  background: #111817;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--text);
+  font-size: 11px;
+  margin-bottom: 12px;
+}
+.search-box:focus {
+  outline: none;
+  border-color: var(--teal);
+}
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+    <a class="brand-icon" href="index.html" title="Inicio"><i class="fa-solid fa-diagram-project"></i></a>
+    <nav class="icon-nav">
+      <a href="index.html" class="icon-nav-item" title="Inicio"><i class="fa-solid fa-house"></i></a>
+      <a href="kennedy.html" class="icon-nav-item" title="Kennedy"><i class="fa-solid fa-map"></i></a>
+      <a href="red-kennedy.html" class="icon-nav-item active" title="Red Kennedy"><i class="fa-solid fa-circle-nodes"></i></a>
+    </nav>
+  </aside>
+
+  <main class="main">
+    <header class="topbar">
+      <div class="topbar-brand"><i class="fa-solid fa-circle-nodes"></i> Red Kennedy · Autoorganización</div>
+      <div class="topbar-actions">
+        <button class="icon-btn" title="Restablecer vista" onclick="resetView()"><i class="fa-solid fa-compress"></i></button>
+        <button class="icon-btn" title="Exportar" onclick="exportSVG()"><i class="fa-solid fa-download"></i></button>
+      </div>
+    </header>
+
+    <div class="content">
+      <div class="canvas-wrap">
+        <svg id="networkSvg" viewBox="0 0 1000 700" preserveAspectRatio="xMidYMid meet">
+          <defs>
+            <marker id="arrow-habilita" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+              <path d="M0,0 L8,4 L0,8 Z" fill="#46d6d0"/>
+            </marker>
+            <marker id="arrow-impide" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+              <path d="M0,0 L8,4 L0,8 Z" fill="#d9824e"/>
+            </marker>
+            <marker id="arrow-mixta" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+              <path d="M0,0 L8,4 L0,8 Z" fill="#e89a6c"/>
+            </marker>
+            <marker id="arrow-bottom-up" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+              <path d="M0,0 L8,4 L0,8 Z" fill="#8fd7c8"/>
+            </marker>
+            <marker id="arrow-top-down" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+              <path d="M0,0 L8,4 L0,8 Z" fill="#a276f2"/>
+            </marker>
+          </defs>
+          <g id="edgesLayer"></g>
+          <g id="nodesLayer"></g>
+        </svg>
+        <div class="zoom-controls">
+          <button onclick="zoomIn()" title="Acercar"><i class="fa-solid fa-plus"></i></button>
+          <button onclick="zoomReset()" title="Restablecer">100%</button>
+          <button onclick="zoomOut()" title="Alejar"><i class="fa-solid fa-minus"></i></button>
+        </div>
+      </div>
+
+      <aside class="sidebar-right">
+        <div class="panel">
+          <h3><i class="fa-solid fa-chart-pie"></i> Estadísticas</h3>
+          <div class="stats-grid">
+            <div class="stat-card"><b id="statNodes">0</b><span>Nodos</span></div>
+            <div class="stat-card"><b id="statEdges">0</b><span>Relaciones</span></div>
+            <div class="stat-card"><b id="statHubs">0</b><span>Hubs</span></div>
+            <div class="stat-card"><b id="statDensity">0%</b><span>Densidad</span></div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <h3><i class="fa-solid fa-filter"></i> Filtros</h3>
+          <input type="search" class="search-box" placeholder="Buscar nodo..." id="searchInput" oninput="filterNodes()">
+          <div class="filter-group">
+            <label>Tipo de nodo</label>
+            <select id="typeFilter" onchange="filterNodes()">
+              <option value="all">Todos</option>
+              <option value="Dinamica">Dinámicas</option>
+              <option value="Actor">Actores</option>
+            </select>
+          </div>
+          <div class="filter-group">
+            <label>Rol</label>
+            <select id="rolFilter" onchange="filterNodes()">
+              <option value="all">Todos</option>
+              <option value="Habilita">Habilita</option>
+              <option value="Impide">Impide</option>
+              <option value="Mixta">Mixta</option>
+              <option value="Bottom-up">Bottom-up</option>
+              <option value="Top-down">Top-down</option>
+            </select>
+          </div>
+          <div class="filter-group">
+            <label>Conexiones mínimas: <span id="minConnLabel">0</span></label>
+            <input type="range" id="minConn" min="0" max="5" value="0" oninput="filterNodes()">
+          </div>
+        </div>
+
+        <div class="panel" id="nodeDetails">
+          <h3><i class="fa-solid fa-crosshairs"></i> Inspección del nodo</h3>
+          <p>Haz clic en un nodo para ver sus conexiones y detalles.</p>
+        </div>
+
+        <div class="panel">
+          <h3><i class="fa-solid fa-legend"></i> Leyenda</h3>
+          <div class="legend">
+            <div class="legend-item"><div class="legend-swatch" style="background:#46d6d0"></div>Dinámica</div>
+            <div class="legend-item"><div class="legend-swatch" style="background:#e89a6c"></div>Actor</div>
+            <div class="legend-item"><div class="legend-swatch" style="background:#8fd7c8"></div>Bottom-up</div>
+            <div class="legend-item"><div class="legend-swatch" style="background:#a276f2"></div>Top-down</div>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </main>
+</div>
+
+<div class="tooltip" id="tooltip"></div>
+
+<script>
+const nodes = [
+  {id:"D1",label:"Desarrollo informal historico de Tintal/Patio Bonito",tipo:"Dinamica",rol:"Habilita"},
+  {id:"D2",label:"Priorizacion presupuestal centralizada (Art.480, ciclo de gobierno)",tipo:"Dinamica",rol:"Impide"},
+  {id:"D3",label:"Reparto de cargas y beneficios sin trazabilidad publica (Art.510.2)",tipo:"Dinamica",rol:"Impide"},
+  {id:"D4",label:"Proteccion a moradores como derecho invocable sin presupuesto propio",tipo:"Dinamica",rol:"Mixta"},
+  {id:"D5",label:"Actor privado unico con capacidad de ejecutar AE09",tipo:"Dinamica",rol:"Impide"},
+  {id:"D6",label:"Mejoramiento Integral de Barrios como respuesta reactiva del Estado",tipo:"Dinamica",rol:"Mixta"},
+  {id:"A1",label:"JAC y organizaciones comunitarias de Tintal-Patio Bonito",tipo:"Actor",rol:"Bottom-up"},
+  {id:"A2",label:"Concejo de Bogota / administracion distrital",tipo:"Actor",rol:"Top-down"},
+  {id:"A3",label:"Secretaria de Planeacion / curaduria urbana",tipo:"Actor",rol:"Top-down"},
+  {id:"A4",label:"Inversionista-operador privado (AE09)",tipo:"Actor",rol:"Top-down"},
+  {id:"A5",label:"Secretaria de Integracion Social / Salud",tipo:"Actor",rol:"Top-down"}
+];
+
+const edges = [
+  {from:"D1",to:"A1",type:"habilita"},
+  {from:"D1",to:"A2",type:"impide"},
+  {from:"D2",to:"A2",type:"habilita"},
+  {from:"D2",to:"A3",type:"impide"},
+  {from:"D3",to:"A3",type:"impide"},
+  {from:"D3",to:"A1",type:"mixta"},
+  {from:"D4",to:"A1",type:"habilita"},
+  {from:"D4",to:"A2",type:"mixta"},
+  {from:"D5",to:"A4",type:"habilita"},
+  {from:"D5",to:"A2",type:"impide"},
+  {from:"D6",to:"A1",type:"habilita"},
+  {from:"D6",to:"A5",type:"mixta"},
+  {from:"A1",to:"A2",type:"bottom-up"},
+  {from:"A2",to:"A3",type:"top-down"},
+  {from:"A3",to:"A4",type:"top-down"},
+  {from:"A4",to:"A5",type:"top-down"},
+  {from:"A1",to:"A5",type:"bottom-up"}
+];
+
+const colorMap = {
+  "Dinamica": "#46d6d0",
+  "Actor": "#e89a6c",
+  "Habilita": "#46d6d0",
+  "Impide": "#d9824e",
+  "Mixta": "#e89a6c",
+  "Bottom-up": "#8fd7c8",
+  "Top-down": "#a276f2"
+};
+
+const edgeColorMap = {
+  "habilita": "#46d6d0",
+  "impide": "#d9824e",
+  "mixta": "#e89a6c",
+  "bottom-up": "#8fd7c8",
+  "top-down": "#a276f2"
+};
+
+let zoom = 1, panX = 0, panY = 0;
+let selectedNode = null;
+let hiddenNodes = new Set();
+
+function getNode(id) { return nodes.find(n => n.id === id); }
+function getNodeConnections(id) {
+  return edges.filter(e => e.from === id || e.to === id);
+}
+function isHub(id) {
+  return getNodeConnections(id).length >= 3;
+}
+
+function calculateLayout() {
+  const hubs = nodes.filter(n => isHub(n.id));
+  const others = nodes.filter(n => !isHub(n.id));
+  const layout = {};
+  const centerX = 500, centerY = 350;
+  
+  hubs.forEach((hub, i) => {
+    const angle = (i / hubs.length) * Math.PI * 2 - Math.PI / 2;
+    const radius = 120;
+    layout[hub.id] = {
+      x: centerX + Math.cos(angle) * radius,
+      y: centerY + Math.sin(angle) * radius
+    };
+  });
+  
+  others.forEach((node, i) => {
+    const connections = getNodeConnections(node.id);
+    let avgX = centerX, avgY = centerY;
+    if (connections.length > 0) {
+      const connectedNodes = connections.map(c => {
+        const otherId = c.from === node.id ? c.to : c.from;
+        return getNode(otherId);
+      }).filter(Boolean);
+      if (connectedNodes.length > 0) {
+        avgX = connectedNodes.reduce((sum, n) => sum + (layout[n.id]?.x || centerX), 0) / connectedNodes.length;
+        avgY = connectedNodes.reduce((sum, n) => sum + (layout[n.id]?.y || centerY), 0) / connectedNodes.length;
+      }
+    }
+    const angle = (i / others.length) * Math.PI * 2;
+    const radius = 220 + Math.random() * 60;
+    layout[node.id] = {
+      x: avgX + Math.cos(angle) * radius * 0.5,
+      y: avgY + Math.sin(angle) * radius * 0.5
+    };
+  });
+  
+  for (let i = 0; i < 100; i++) {
+    nodes.forEach(node => {
+      const conns = getNodeConnections(node.id);
+      conns.forEach(conn => {
+        const otherId = conn.from === node.id ? conn.to : conn.from;
+        const other = layout[otherId];
+        const current = layout[node.id];
+        if (other && current) {
+          const dx = other.x - current.x;
+          const dy = other.y - current.y;
+          const dist = Math.hypot(dx, dy) || 1;
+          const minDist = 100;
+          if (dist < minDist) {
+            const push = (minDist - dist) * 0.02;
+            current.x -= (dx / dist) * push;
+            current.y -= (dy / dist) * push;
+          }
+        }
+      });
+    });
+  }
+  
+  return layout;
+}
+
+function render() {
+  const layout = calculateLayout();
+  const edgesLayer = document.getElementById('edgesLayer');
+  const nodesLayer = document.getElementById('nodesLayer');
+  
+  edgesLayer.innerHTML = '';
+  nodesLayer.innerHTML = '';
+  
+  edges.forEach((edge, i) => {
+    const from = layout[edge.from];
+    const to = layout[edge.to];
+    if (!from || !to) return;
+    
+    const dx = to.x - from.x;
+    const dy = to.y - from.y;
+    const dist = Math.hypot(dx, dy) || 1;
+    const ux = dx / dist;
+    const uy = dy / dist;
+    
+    const fromNode = getNode(edge.from);
+    const toNode = getNode(edge.to);
+    const fromRadius = isHub(edge.from) ? 35 : 25;
+    const toRadius = isHub(edge.to) ? 35 : 25;
+    
+    const x1 = from.x + ux * fromRadius;
+    const y1 = from.y + uy * fromRadius;
+    const x2 = to.x - ux * (toRadius + 8);
+    const y2 = to.y - uy * (toRadius + 8);
+    
+    const color = edgeColorMap[edge.type] || '#888';
+    const isHidden = hiddenNodes.has(edge.from) || hiddenNodes.has(edge.to);
+    
+    const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+    line.setAttribute('x1', x1);
+    line.setAttribute('y1', y1);
+    line.setAttribute('x2', x2);
+    line.setAttribute('y2', y2);
+    line.setAttribute('stroke', color);
+    line.setAttribute('stroke-width', edge.type === 'habilita' ? 2.5 : edge.type === 'impide' ? 2 : 1.5);
+    line.setAttribute('stroke-dasharray', edge.type === 'mixta' ? '5,5' : 'none');
+    line.setAttribute('opacity', isHidden ? 0 : 0.7);
+    line.setAttribute('class', 'network-edge');
+    line.setAttribute('data-edge-index', i);
+    line.style.cursor = 'pointer';
+    line.addEventListener('click', (e) => {
+      e.stopPropagation();
+      highlightConnection(edge.from, edge.to);
+    });
+    edgesLayer.appendChild(line);
+  });
+  
+  nodes.forEach(node => {
+    const pos = layout[node.id];
+    if (!pos) return;
+    
+    const color = colorMap[node.tipo] || '#888';
+    const radius = isHub(node.id) ? 35 : 25;
+    const isHidden = hiddenNodes.has(node.id);
+    
+    const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+    g.setAttribute('class', 'network-node' + (isHidden ? ' dimmed' : '') + (selectedNode === node.id ? ' selected' : ''));
+    g.setAttribute('transform', `translate(${pos.x}, ${pos.y})`);
+    g.setAttribute('data-node-id', node.id);
+    
+    const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+    circle.setAttribute('r', radius);
+    circle.setAttribute('fill', '#0b0c0f');
+    circle.setAttribute('stroke', color);
+    circle.setAttribute('stroke-width', isHub(node.id) ? 3 : 2);
+    g.appendChild(circle);
+    
+    if (isHub(node.id)) {
+      const halo = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+      halo.setAttribute('r', radius + 6);
+      halo.setAttribute('fill', 'none');
+      halo.setAttribute('stroke', color);
+      halo.setAttribute('stroke-width', 1);
+      halo.setAttribute('stroke-dasharray', '3,3');
+      halo.setAttribute('opacity', 0.5);
+      g.appendChild(halo);
+    }
+    
+    const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+    text.setAttribute('text-anchor', 'middle');
+    text.setAttribute('dy', '4');
+    text.setAttribute('fill', '#f2ece3');
+    text.setAttribute('font-size', isHub(node.id) ? '11' : '9');
+    text.setAttribute('font-weight', '600');
+    text.textContent = node.id;
+    g.appendChild(text);
+    
+    const label = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+    label.setAttribute('text-anchor', 'middle');
+    label.setAttribute('dy', radius + 14);
+    label.setAttribute('fill', '#8e877f');
+    label.setAttribute('font-size', '8');
+    label.textContent = node.label.length > 30 ? node.label.substring(0, 30) + '...' : node.label;
+    g.appendChild(label);
+    
+    g.addEventListener('click', (e) => {
+      e.stopPropagation();
+      selectNode(node.id);
+    });
+    
+    g.addEventListener('mouseenter', (e) => {
+      showTooltip(e, node);
+    });
+    
+    g.addEventListener('mouseleave', () => {
+      hideTooltip();
+    });
+    
+    nodesLayer.appendChild(g);
+  });
+  
+  updateStats();
+}
+
+function selectNode(nodeId) {
+  selectedNode = selectedNode === nodeId ? null : nodeId;
+  render();
+  
+  const details = document.getElementById('nodeDetails');
+  if (!selectedNode) {
+    details.innerHTML = '<h3><i class="fa-solid fa-crosshairs"></i> Inspección del nodo</h3><p>Haz clic en un nodo para ver sus conexiones y detalles.</p>';
+    return;
+  }
+  
+  const node = getNode(selectedNode);
+  const connections = getNodeConnections(selectedNode);
+  const isHubNode = isHub(selectedNode);
+  
+  let html = `<h3><i class="fa-solid fa-crosshairs"></i> Inspección del nodo</h3>`;
+  html += `<h4>${node.id} · ${node.label}</h4>`;
+  html += `<span class="node-type ${node.tipo.toLowerCase()}">${node.tipo}</span>`;
+  html += `<div class="node-rol ${node.rol.toLowerCase()}"><strong>Rol:</strong> ${node.rol}</div>`;
+  html += `<div class="node-rol"><strong>Conexiones:</strong> ${connections.length}</div>`;
+  if (isHubNode) {
+    html += `<div class="node-rol" style="border-left-color:#f5c945"><strong>Hub:</strong> Nodo con alta conectividad</div>`;
+  }
+  
+  if (connections.length > 0) {
+    html += `<ul class="connections-list">`;
+    connections.forEach(conn => {
+      const otherId = conn.from === selectedNode ? conn.to : conn.from;
+      const other = getNode(otherId);
+      const icon = conn.type === 'habilita' ? 'fa-arrow-right' : conn.type === 'impide' ? 'fa-ban' : 'fa-exchange-alt';
+      html += `<li><i class="fa-solid ${icon}" style="color:${edgeColorMap[conn.type]}"></i> ${other.id} · ${conn.type}</li>`;
+    });
+    html += `</ul>`;
+  }
+  
+  details.innerHTML = html;
+}
+
+function highlightConnection(fromId, toId) {
+  document.querySelectorAll('.network-edge').forEach(edge => {
+    const idx = edge.getAttribute('data-edge-index');
+    const conn = edges[parseInt(idx)];
+    if (conn && ((conn.from === fromId && conn.to === toId) || (conn.from === toId && conn.to === fromId))) {
+      edge.classList.add('highlight');
+    } else {
+      edge.classList.add('dimmed');
+    }
+  });
+  
+  setTimeout(() => {
+    document.querySelectorAll('.network-edge').forEach(edge => {
+      edge.classList.remove('highlight', 'dimmed');
+    });
+  }, 2000);
+}
+
+function filterNodes() {
+  const search = document.getElementById('searchInput').value.toLowerCase();
+  const typeFilter = document.getElementById('typeFilter').value;
+  const rolFilter = document.getElementById('rolFilter').value;
+  const minConn = parseInt(document.getElementById('minConn').value);
+  
+  document.getElementById('minConnLabel').textContent = minConn;
+  
+  hiddenNodes.clear();
+  
+  nodes.forEach(node => {
+    const conns = getNodeConnections(node.id).length;
+    const matchSearch = node.label.toLowerCase().includes(search) || node.id.toLowerCase().includes(search);
+    const matchType = typeFilter === 'all' || node.tipo === typeFilter;
+    const matchRol = rolFilter === 'all' || node.rol === rolFilter;
+    const matchConn = conns >= minConn;
+    
+    if (!matchSearch || !matchType || !matchRol || !matchConn) {
+      hiddenNodes.add(node.id);
+    }
+  });
+  
+  render();
+}
+
+function updateStats() {
+  const visibleNodes = nodes.filter(n => !hiddenNodes.has(n.id));
+  const visibleEdges = edges.filter(e => !hiddenNodes.has(e.from) && !hiddenNodes.has(e.to));
+  const hubs = visibleNodes.filter(n => isHub(n.id)).length;
+  const maxEdges = visibleNodes.length * (visibleNodes.length - 1) / 2;
+  const density = maxEdges > 0 ? Math.round((visibleEdges.length / maxEdges) * 100) : 0;
+  
+  document.getElementById('statNodes').textContent = visibleNodes.length;
+  document.getElementById('statEdges').textContent = visibleEdges.length;
+  document.getElementById('statHubs').textContent = hubs;
+  document.getElementById('statDensity').textContent = density + '%';
+}
+
+function showTooltip(event, node) {
+  const tooltip = document.getElementById('tooltip');
+  const conns = getNodeConnections(node.id);
+  tooltip.innerHTML = `<strong>${node.id} · ${node.tipo}</strong><span>${node.label}</span><span style="color:${colorMap[node.rol]}">Rol: ${node.rol}</span><span>${conns.length} conexiones${isHub(node.id) ? ' · Hub' : ''}</span>`;
+  tooltip.style.left = (event.clientX + 12) + 'px';
+  tooltip.style.top = (event.clientY + 12) + 'px';
+  tooltip.classList.add('visible');
+}
+
+function hideTooltip() {
+  document.getElementById('tooltip').classList.remove('visible');
+}
+
+function zoomIn() { zoom = Math.min(zoom * 1.2, 3); applyTransform(); }
+function zoomOut() { zoom = Math.max(zoom / 1.2, 0.3); applyTransform(); }
+function zoomReset() { zoom = 1; panX = 0; panY = 0; applyTransform(); }
+function resetView() { zoomReset(); hiddenNodes.clear(); selectedNode = null; document.getElementById('searchInput').value = ''; document.getElementById('typeFilter').value = 'all'; document.getElementById('rolFilter').value = 'all'; document.getElementById('minConn').value = 0; render(); }
+
+function applyTransform() {
+  const svg = document.getElementById('networkSvg');
+  svg.style.transform = `scale(${zoom}) translate(${panX}px, ${panY}px)`;
+}
+
+function exportSVG() {
+  const svg = document.getElementById('networkSvg');
+  const serializer = new XMLSerializer();
+  const source = serializer.serializeToString(svg);
+  const blob = new Blob([source], {type: 'image/svg+xml'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'red-kennedy.svg';
+  a.click();
+}
+
+// Pan functionality
+let isPanning = false;
+let startX, startY;
+
+const svg = document.getElementById('networkSvg');
+svg.addEventListener('mousedown', (e) => {
+  if (e.target === svg || e.target.tagName === 'svg') {
+    isPanning = true;
+    startX = e.clientX - panX;
+    startY = e.clientY - panY;
+  }
+});
+
+svg.addEventListener('mousemove', (e) => {
+  if (isPanning) {
+    panX = e.clientX - startX;
+    panY = e.clientY - startY;
+    applyTransform();
+  }
+});
+
+svg.addEventListener('mouseup', () => { isPanning = false; });
+svg.addEventListener('mouseleave', () => { isPanning = false; });
+
+svg.addEventListener('click', (e) => {
+  if (e.target === svg || e.target.tagName === 'svg') {
+    selectedNode = null;
+    render();
+  }
+});
+
+// Initial render
+render();
+</script>
+</body>
+</html>
