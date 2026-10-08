@@ -18,6 +18,7 @@
   --red: #d9824e;
   --green: #8fd7c8;
   --purple: #a276f2;
+  --yellow: #f5c945;
 }
 * { box-sizing: border-box; margin: 0; padding: 0; }
 body {
@@ -99,7 +100,7 @@ body {
 .content {
   flex: 1;
   display: grid;
-  grid-template-columns: 1fr 300px;
+  grid-template-columns: 1fr 320px;
   overflow: hidden;
 }
 .canvas-wrap {
@@ -332,6 +333,38 @@ body {
   outline: none;
   border-color: var(--teal);
 }
+.toggle-panel {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+  margin-top: 8px;
+}
+.toggle-btn {
+  padding: 6px 8px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: #111817;
+  color: var(--muted);
+  font-size: 9px;
+  cursor: pointer;
+  transition: all 0.18s;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  justify-content: center;
+}
+.toggle-btn:hover {
+  border-color: var(--teal);
+  color: var(--teal);
+}
+.toggle-btn.active {
+  background: rgba(70,214,208,0.15);
+  border-color: var(--teal);
+  color: var(--teal);
+}
+.toggle-btn i {
+  font-size: 10px;
+}
 </style>
 </head>
 <body>
@@ -423,6 +456,11 @@ body {
           </div>
         </div>
 
+        <div class="panel">
+          <h3><i class="fa-solid fa-toggle-on"></i> Prender / Apagar Nodos</h3>
+          <div class="toggle-panel" id="togglePanel"></div>
+        </div>
+
         <div class="panel" id="nodeDetails">
           <h3><i class="fa-solid fa-crosshairs"></i> Inspección del nodo</h3>
           <p>Haz clic en un nodo para ver sus conexiones y detalles.</p>
@@ -446,17 +484,17 @@ body {
 
 <script>
 const nodes = [
-  {id:"D1",label:"Desarrollo informal historico de Tintal/Patio Bonito",tipo:"Dinamica",rol:"Habilita"},
-  {id:"D2",label:"Priorizacion presupuestal centralizada (Art.480, ciclo de gobierno)",tipo:"Dinamica",rol:"Impide"},
-  {id:"D3",label:"Reparto de cargas y beneficios sin trazabilidad publica (Art.510.2)",tipo:"Dinamica",rol:"Impide"},
-  {id:"D4",label:"Proteccion a moradores como derecho invocable sin presupuesto propio",tipo:"Dinamica",rol:"Mixta"},
-  {id:"D5",label:"Actor privado unico con capacidad de ejecutar AE09",tipo:"Dinamica",rol:"Impide"},
-  {id:"D6",label:"Mejoramiento Integral de Barrios como respuesta reactiva del Estado",tipo:"Dinamica",rol:"Mixta"},
-  {id:"A1",label:"JAC y organizaciones comunitarias de Tintal-Patio Bonito",tipo:"Actor",rol:"Bottom-up"},
-  {id:"A2",label:"Concejo de Bogota / administracion distrital",tipo:"Actor",rol:"Top-down"},
-  {id:"A3",label:"Secretaria de Planeacion / curaduria urbana",tipo:"Actor",rol:"Top-down"},
-  {id:"A4",label:"Inversionista-operador privado (AE09)",tipo:"Actor",rol:"Top-down"},
-  {id:"A5",label:"Secretaria de Integracion Social / Salud",tipo:"Actor",rol:"Top-down"}
+  {id:"D1",label:"Desarrollo informal historico de Tintal/Patio Bonito",tipo:"Dinamica",rol:"Habilita",icon:"fa-house-chimney"},
+  {id:"D2",label:"Priorizacion presupuestal centralizada (Art.480, ciclo de gobierno)",tipo:"Dinamica",rol:"Impide",icon:"fa-coins"},
+  {id:"D3",label:"Reparto de cargas y beneficios sin trazabilidad publica (Art.510.2)",tipo:"Dinamica",rol:"Impide",icon:"fa-scale-unbalanced"},
+  {id:"D4",label:"Proteccion a moradores como derecho invocable sin presupuesto propio",tipo:"Dinamica",rol:"Mixta",icon:"fa-shield-halved"},
+  {id:"D5",label:"Actor privado unico con capacidad de ejecutar AE09",tipo:"Dinamica",rol:"Impide",icon:"fa-plane"},
+  {id:"D6",label:"Mejoramiento Integral de Barrios como respuesta reactiva del Estado",tipo:"Dinamica",rol:"Mixta",icon:"fa-hammer"},
+  {id:"A1",label:"JAC y organizaciones comunitarias de Tintal-Patio Bonito",tipo:"Actor",rol:"Bottom-up",icon:"fa-people-group"},
+  {id:"A2",label:"Concejo de Bogota / administracion distrital",tipo:"Actor",rol:"Top-down",icon:"fa-landmark"},
+  {id:"A3",label:"Secretaria de Planeacion / curaduria urbana",tipo:"Actor",rol:"Top-down",icon:"fa-compass-drafting"},
+  {id:"A4",label:"Inversionista-operador privado (AE09)",tipo:"Actor",rol:"Top-down",icon:"fa-hand-holding-dollar"},
+  {id:"A5",label:"Secretaria de Integracion Social / Salud",tipo:"Actor",rol:"Top-down",icon:"fa-heart-pulse"}
 ];
 
 const edges = [
@@ -591,8 +629,8 @@ function render() {
     
     const fromNode = getNode(edge.from);
     const toNode = getNode(edge.to);
-    const fromRadius = isHub(edge.from) ? 35 : 25;
-    const toRadius = isHub(edge.to) ? 35 : 25;
+    const fromRadius = isHub(edge.from) ? 40 : 28;
+    const toRadius = isHub(edge.to) ? 40 : 28;
     
     const x1 = from.x + ux * fromRadius;
     const y1 = from.y + uy * fromRadius;
@@ -626,7 +664,7 @@ function render() {
     if (!pos) return;
     
     const color = colorMap[node.tipo] || '#888';
-    const radius = isHub(node.id) ? 35 : 25;
+    const radius = isHub(node.id) ? 40 : 28;
     const isHidden = hiddenNodes.has(node.id);
     
     const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
@@ -652,21 +690,31 @@ function render() {
       g.appendChild(halo);
     }
     
+    const icon = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+    icon.setAttribute('text-anchor', 'middle');
+    icon.setAttribute('dy', '5');
+    icon.setAttribute('fill', color);
+    icon.setAttribute('font-size', isHub(node.id) ? '16' : '12');
+    icon.setAttribute('font-family', 'Font Awesome 6 Free');
+    icon.setAttribute('font-weight', '900');
+    icon.textContent = '\uf015';
+    g.appendChild(icon);
+    
     const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
     text.setAttribute('text-anchor', 'middle');
-    text.setAttribute('dy', '4');
+    text.setAttribute('dy', radius + 16);
     text.setAttribute('fill', '#f2ece3');
-    text.setAttribute('font-size', isHub(node.id) ? '11' : '9');
-    text.setAttribute('font-weight', '600');
+    text.setAttribute('font-size', '10');
+    text.setAttribute('font-weight', '700');
     text.textContent = node.id;
     g.appendChild(text);
     
     const label = document.createElementNS('http://www.w3.org/2000/svg', 'text');
     label.setAttribute('text-anchor', 'middle');
-    label.setAttribute('dy', radius + 14);
+    label.setAttribute('dy', radius + 28);
     label.setAttribute('fill', '#8e877f');
     label.setAttribute('font-size', '8');
-    label.textContent = node.label.length > 30 ? node.label.substring(0, 30) + '...' : node.label;
+    label.textContent = node.label.length > 35 ? node.label.substring(0, 35) + '...' : node.label;
     g.appendChild(label);
     
     g.addEventListener('click', (e) => {
@@ -686,6 +734,30 @@ function render() {
   });
   
   updateStats();
+  renderTogglePanel();
+}
+
+function renderTogglePanel() {
+  const panel = document.getElementById('togglePanel');
+  panel.innerHTML = '';
+  
+  nodes.forEach(node => {
+    const isActive = !hiddenNodes.has(node.id);
+    const btn = document.createElement('button');
+    btn.className = 'toggle-btn' + (isActive ? ' active' : '');
+    btn.innerHTML = `<i class="fa-solid ${node.icon}"></i> ${node.id}`;
+    btn.onclick = () => toggleNode(node.id);
+    panel.appendChild(btn);
+  });
+}
+
+function toggleNode(nodeId) {
+  if (hiddenNodes.has(nodeId)) {
+    hiddenNodes.delete(nodeId);
+  } else {
+    hiddenNodes.add(nodeId);
+  }
+  render();
 }
 
 function selectNode(nodeId) {
@@ -703,7 +775,7 @@ function selectNode(nodeId) {
   const isHubNode = isHub(selectedNode);
   
   let html = `<h3><i class="fa-solid fa-crosshairs"></i> Inspección del nodo</h3>`;
-  html += `<h4>${node.id} · ${node.label}</h4>`;
+  html += `<h4><i class="fa-solid ${node.icon}" style="color:${colorMap[node.tipo]};margin-right:6px"></i>${node.id} · ${node.label}</h4>`;
   html += `<span class="node-type ${node.tipo.toLowerCase()}">${node.tipo}</span>`;
   html += `<div class="node-rol ${node.rol.toLowerCase()}"><strong>Rol:</strong> ${node.rol}</div>`;
   html += `<div class="node-rol"><strong>Conexiones:</strong> ${connections.length}</div>`;
@@ -784,7 +856,7 @@ function updateStats() {
 function showTooltip(event, node) {
   const tooltip = document.getElementById('tooltip');
   const conns = getNodeConnections(node.id);
-  tooltip.innerHTML = `<strong>${node.id} · ${node.tipo}</strong><span>${node.label}</span><span style="color:${colorMap[node.rol]}">Rol: ${node.rol}</span><span>${conns.length} conexiones${isHub(node.id) ? ' · Hub' : ''}</span>`;
+  tooltip.innerHTML = `<strong><i class="fa-solid ${node.icon}" style="margin-right:4px"></i>${node.id} · ${node.tipo}</strong><span>${node.label}</span><span style="color:${colorMap[node.rol]}">Rol: ${node.rol}</span><span>${conns.length} conexiones${isHub(node.id) ? ' · Hub' : ''}</span>`;
   tooltip.style.left = (event.clientX + 12) + 'px';
   tooltip.style.top = (event.clientY + 12) + 'px';
   tooltip.classList.add('visible');
@@ -816,7 +888,6 @@ function exportSVG() {
   a.click();
 }
 
-// Pan functionality
 let isPanning = false;
 let startX, startY;
 
@@ -847,7 +918,6 @@ svg.addEventListener('click', (e) => {
   }
 });
 
-// Initial render
 render();
 </script>
 </body>
