@@ -3,150 +3,151 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Red Kennedy · 3D</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<title>Red Socioecológica Kennedy · Humedales</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 <style>
-:root{--bg:#0b0c0f;--panel:#141518;--border:rgba(201,193,182,0.18);--text:#f2ece3;--muted:#8e877f;--teal:#46d6d0;--orange:#e89a6c;--red:#d9824e;--green:#8fd7c8;--purple:#a276f2;--yellow:#f5c945;--blue:#5b9def}
-*{box-sizing:border-box;margin:0;padding:0}
-body{background:var(--bg);color:var(--text);font-family:Inter,system-ui,sans-serif;overflow:hidden;height:100vh}
-.app{display:flex;height:100vh}
-.sidebar{width:64px;min-width:64px;background:#080c0c;border-right:1px solid var(--border);display:flex;flex-direction:column;align-items:center;padding:16px 0;z-index:100}
-.brand-icon{width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,var(--teal),#1a9d94);display:grid;place-items:center;color:#06110f;font-size:16px;text-decoration:none;margin-bottom:20px}
-.icon-nav{display:flex;flex-direction:column;gap:8px}
-.icon-nav-item{width:40px;height:40px;display:grid;place-items:center;border-radius:10px;color:#859097;text-decoration:none;font-size:15px;transition:all 0.18s}
-.icon-nav-item:hover,.icon-nav-item.active{color:var(--teal);background:rgba(70,214,208,0.1)}
-.main{flex:1;display:flex;flex-direction:column;overflow:hidden}
-.topbar{height:52px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 20px;background:rgba(11,12,15,0.95)}
-.topbar-brand{font-family:'Space Grotesk',sans-serif;font-size:14px;font-weight:600}
-.topbar-brand i{color:var(--teal);margin-right:8px}
-.topbar-actions{display:flex;gap:8px}
-.icon-btn{width:32px;height:32px;border:1px solid var(--border);border-radius:8px;background:transparent;color:var(--muted);cursor:pointer;display:grid;place-items:center;transition:all 0.18s}
-.icon-btn:hover{color:var(--teal);border-color:var(--teal)}
-.content{flex:1;display:grid;grid-template-columns:1fr 340px;overflow:hidden}
-.canvas-wrap{position:relative;overflow:hidden;background:radial-gradient(circle at 50% 45%,rgba(30,81,75,0.12),transparent 60%),#0b0c0f}
-#threeCanvas{width:100%;height:100%;display:block;cursor:grab}
-#threeCanvas:active{cursor:grabbing}
-.sidebar-right{border-left:1px solid var(--border);background:var(--panel);overflow-y:auto;padding:16px}
-.panel{background:#1a1b1e;border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:12px}
-.panel h3{font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--teal);margin-bottom:10px;display:flex;align-items:center;gap:6px}
-.panel p{font-size:11px;color:var(--muted);line-height:1.5}
-.legend-item{display:flex;align-items:flex-start;gap:8px;margin-bottom:8px;font-size:10px;color:var(--muted)}
-.legend-item:last-child{margin-bottom:0}
-.legend-swatch{width:28px;height:4px;border-radius:2px;flex-shrink:0;margin-top:4px}
-.legend-swatch.solid{background:var(--blue)}
-.legend-swatch.dashed{background:repeating-linear-gradient(90deg,var(--orange) 0,var(--orange) 4px,transparent 4px,transparent 8px)}
-.legend-swatch.dotted{background:repeating-linear-gradient(90deg,var(--red) 0,var(--red) 2px,transparent 2px,transparent 6px)}
-.legend-swatch.green{background:var(--green)}
-.legend-dot{width:14px;height:14px;border-radius:50%;background:var(--purple);flex-shrink:0;margin-top:2px}
-.stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.stat-card{background:#111817;border:1px solid var(--border);border-radius:8px;padding:10px;text-align:center}
-.stat-card b{display:block;font-size:20px;color:var(--teal);font-family:'Space Grotesk',sans-serif}
-.stat-card span{font-size:8px;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px}
-.search-box{width:100%;padding:8px 10px;background:#111817;border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:11px;margin-bottom:12px}
-.search-box:focus{outline:none;border-color:var(--teal)}
-.filter-group{margin-bottom:12px}
-.filter-group label{display:block;font-size:9px;text-transform:uppercase;letter-spacing:0.5px;color:var(--muted);margin-bottom:6px}
-.filter-group select{width:100%;padding:6px 8px;background:#111817;border:1px solid var(--border);border-radius:6px;color:var(--text);font-size:11px}
-.filter-group input[type="range"]{width:100%;accent-color:var(--teal)}
-.toggle-panel{display:grid;grid-template-columns:1fr 1fr;gap:4px;margin-top:8px;max-height:180px;overflow-y:auto}
-.toggle-btn{padding:4px 6px;border:1px solid var(--border);border-radius:6px;background:#111817;color:var(--muted);font-size:8px;cursor:pointer;transition:all 0.18s;display:flex;align-items:center;gap:3px;justify-content:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.toggle-btn:hover{border-color:var(--teal);color:var(--teal)}
-.toggle-btn.active{background:rgba(70,214,208,0.15);border-color:var(--teal);color:var(--teal)}
-.node-details h4{font-size:13px;color:var(--text);margin-bottom:6px}
-.node-details .node-type{display:inline-block;padding:2px 8px;border-radius:4px;font-size:9px;font-weight:600;margin-bottom:8px}
-.connections-list{margin-top:8px;padding-left:0;list-style:none}
-.connections-list li{font-size:10px;padding:4px 0;border-bottom:1px solid rgba(255,255,255,0.05);color:var(--muted)}
-.connections-list li:last-child{border-bottom:none}
-.connections-list li i{margin-right:6px;font-size:8px}
-.zoom-controls{position:absolute;bottom:16px;right:16px;display:flex;gap:6px;z-index:10}
-.zoom-controls button{width:36px;height:36px;border:1px solid var(--border);border-radius:8px;background:rgba(11,12,15,0.9);color:var(--teal);font-size:14px;cursor:pointer;transition:all 0.18s}
-.zoom-controls button:hover{background:rgba(70,214,208,0.15);border-color:var(--teal)}
-.tooltip{position:fixed;z-index:1000;display:none;max-width:280px;padding:12px 14px;background:#1a1b1e;border:1px solid rgba(70,214,208,0.4);border-radius:10px;box-shadow:0 12px 30px rgba(0,0,0,0.5);pointer-events:none}
-.tooltip.visible{display:block}
-.tooltip strong{display:block;color:var(--teal);font-size:12px;margin-bottom:4px}
-.tooltip span{font-size:10px;color:var(--muted);line-height:1.4}
+:root{--bg:#000000;--accent:#84A48B;--accent-glow:rgba(132,164,139,0.45);--ink:#f1f5f9;--ink-dim:#94a3b8;--glass-bg:rgba(6,9,15,0.92);--glass-border:rgba(255,255,255,0.12)}
+*{box-sizing:border-box;margin:0;padding:0;user-select:none}
+html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);color:var(--ink);font-family:Inter,system-ui,sans-serif;font-size:12px;-webkit-font-smoothing:antialiased}
+#canvasContainer{position:absolute;inset:0;width:100%;height:100%;z-index:1;cursor:crosshair}
+#sceneCanvas{display:block;width:100%;height:100%}
+.glass-panel{background:var(--glass-bg);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border:1px solid var(--glass-border);border-radius:8px;box-shadow:0 16px 48px rgba(0,0,0,0.85)}
+.top-header{position:absolute;top:8px;left:8px;right:8px;display:flex;align-items:center;justify-content:space-between;pointer-events:none;z-index:100;flex-wrap:wrap;gap:6px;transition:opacity 0.4s ease,transform 0.4s ease}
+.nav-group{display:flex;align-items:center;gap:5px;pointer-events:auto;flex-wrap:wrap}
+.brand-title{padding:5px 10px;font-weight:800;letter-spacing:0.5px;color:var(--accent);display:flex;align-items:center;gap:6px;font-size:10.5px;text-transform:uppercase;white-space:nowrap}
+.btn-flat{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.12);color:#cbd5e1;padding:5px 9px;border-radius:6px;font-size:10px;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:5px;white-space:nowrap;transition:all 0.15s ease;text-decoration:none}
+.btn-flat:hover{background:rgba(132,164,139,0.15);border-color:rgba(132,164,139,0.4);color:#fff}
+.btn-flat.active{background:rgba(132,164,139,0.2);border-color:#84A48B;color:#84A48B}
+.search-box{background:rgba(0,0,0,0.6);border:1px solid rgba(255,255,255,0.18);color:#84A48B;padding:5px 10px;border-radius:6px;font-family:inherit;font-size:10px;outline:none;width:130px;transition:width 0.25s ease}
+.search-box:focus{width:170px;border-color:#84A48B}
+.side-drawer{position:absolute;top:48px;left:8px;width:310px;max-height:calc(100vh - 120px);overflow-y:auto;padding:12px;pointer-events:auto;z-index:90;transition:opacity 0.3s ease,transform 0.3s ease;border:1px solid rgba(132,164,139,0.25);box-shadow:0 20px 50px rgba(0,0,0,0.9)}
+.side-drawer.collapsed{opacity:0;pointer-events:none;transform:translateX(-14px)}
+.drawer-header{font-weight:800;font-size:10px;text-transform:uppercase;letter-spacing:1px;color:#94a3b8;border-bottom:1px solid rgba(255,255,255,0.12);padding-bottom:8px;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center}
+.cat-card{background:rgba(15,23,42,0.6);border:1px solid rgba(255,255,255,0.08);border-radius:8px;padding:8px 10px;margin-bottom:6px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;transition:all 0.2s ease;position:relative;overflow:hidden}
+.cat-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--cat-color,#84a48b);box-shadow:0 0 10px var(--cat-color,#84a48b)}
+.cat-card:hover{border-color:rgba(132,164,139,0.4);background:rgba(15,23,42,0.9);transform:translateX(3px)}
+.cat-card.inactive{opacity:0.35;filter:grayscale(0.8);transform:none !important}
+.cat-label-wrap{display:flex;align-items:center;gap:8px}
+.badge-count{font-size:10px;background:rgba(0,0,0,0.6);border:1px solid rgba(255,255,255,0.15);padding:2px 7px;border-radius:6px;color:#84A48B;font-family:ui-monospace,monospace;font-weight:700}
+.toggle-box{width:16px;height:16px;border:1px solid rgba(255,255,255,0.3);border-radius:4px;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0.5);transition:all 0.15s;cursor:pointer}
+.toggle-box.checked{background:var(--toggle-bg,#84A48B);border-color:var(--toggle-bg,#84A48B)}
+.toggle-box.checked::after{content:'';width:5px;height:5px;background:#000;border-radius:1px}
+.node-inspector{position:absolute;top:62px;right:12px;width:370px;max-height:calc(100vh - 140px);overflow-y:auto;padding:16px;pointer-events:auto;z-index:150;border-left:4px solid #84A48B;animation:fadeIn 0.2s ease-out;display:none}
+.node-inspector.visible{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}
+.inspector-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:12px;border-bottom:1px solid rgba(255,255,255,0.1);padding-bottom:8px}
+.node-title{font-size:14px;font-weight:700;color:#84A48B}
+.node-subtitle{font-size:11px;font-style:italic;color:#cbd5e1}
+.btn-close{cursor:pointer;color:#94a3b8;padding:2px 8px;border:1px solid rgba(255,255,255,0.15);border-radius:4px;background:transparent;font-size:18px;line-height:1}
+.btn-close:hover{color:#fff;background:rgba(255,255,255,0.1)}
+.data-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}
+.metric-card{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:6px;padding:8px}
+.metric-val{font-size:13px;font-weight:700;color:#84a48b;font-family:monospace}
+.metric-lbl{font-size:10px;color:#64748b;text-transform:uppercase}
+.sec-header{font-size:10px;text-transform:uppercase;letter-spacing:0.8px;color:#84a48b;margin-bottom:4px;font-weight:700;margin-top:10px}
+.text-content{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:6px;padding:8px 10px;color:#cbd5e1;font-size:11px;line-height:1.4;margin-bottom:10px}
+.text-content.alert{background:rgba(201,99,73,0.12);border-color:rgba(201,99,73,0.35);color:#ff80a0}
+.neighbor-scroll{max-height:120px;overflow-y:auto;background:rgba(0,0,0,0.4);border:1px solid rgba(255,255,255,0.1);border-radius:6px}
+.neighbor-row{display:flex;align-items:center;justify-content:space-between;padding:6px 10px;border-bottom:1px solid rgba(255,255,255,0.05);cursor:pointer;font-size:10px;color:#cbd5e1}
+.neighbor-row:hover{background:rgba(132,164,139,0.15);color:#84a48b}
+.neighbor-row:last-child{border-bottom:none}
+.inspector-actions{display:flex;gap:6px;margin-top:12px}
+.inspector-actions button{flex:1;padding:8px;border-radius:6px;border:1px solid rgba(255,255,255,0.15);background:rgba(255,255,255,0.04);color:#cbd5e1;font-size:10px;font-weight:600;cursor:pointer;transition:all 0.15s}
+.inspector-actions button:hover{background:rgba(132,164,139,0.15);border-color:#84a48b;color:#fff}
+.welcome-overlay{position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,0.95);backdrop-filter:blur(24px);display:flex;align-items:center;justify-content:center;z-index:9999;animation:modalFadeIn 0.35s cubic-bezier(0.16,1,0.3,1)}
+.welcome-overlay.hidden{display:none}
+@keyframes modalFadeIn{from{opacity:0;transform:scale(0.96)}to{opacity:1;transform:scale(1)}}
+.welcome-modal{width:92%;max-width:1120px;max-height:90vh;background:#050505;border:1px solid rgba(255,255,255,0.15);border-radius:18px;box-shadow:0 30px 90px #000;padding:28px;overflow-y:auto;color:#f1f5f9;display:flex;flex-direction:column;gap:20px}
+.welcome-header{display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(255,255,255,0.12);padding-bottom:16px}
+.pie-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:20px}
+.pie-card{background:#0a0a0c;border:1px solid rgba(255,255,255,0.12);border-radius:14px;padding:18px;display:flex;flex-direction:column;align-items:center;gap:12px;position:relative;overflow:hidden}
+.pie-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,#84A48B,transparent);opacity:0.8}
+.pie-card-title{font-size:13px;font-weight:800;color:#84A48B;letter-spacing:0.5px;text-align:center;text-transform:uppercase}
+.pie-card-desc{font-size:11px;color:#94a3b8;text-align:center;line-height:1.4}
+.donut-wrap{position:relative;width:200px;height:200px}
+.donut-wrap svg{width:100%;height:100%}
+.legend-row{display:flex;align-items:center;justify-content:space-between;font-size:10.5px;padding:5px 10px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.06);border-radius:6px;margin-top:4px}
+.legend-label{display:flex;align-items:center;gap:8px;color:#cbd5e1;font-weight:500}
+.legend-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0}
+.legend-val{font-weight:800;color:#84a48b}
 </style>
 </head>
 <body>
-<div class="app">
-  <aside class="sidebar">
-    <a class="brand-icon" href="index.html" title="Inicio"><i class="fa-solid fa-diagram-project"></i></a>
-    <nav class="icon-nav">
-      <a href="index.html" class="icon-nav-item" title="Inicio"><i class="fa-solid fa-house"></i></a>
-      <a href="kennedy.html" class="icon-nav-item" title="Kennedy"><i class="fa-solid fa-map"></i></a>
-      <a href="red-kennedy.html" class="icon-nav-item active" title="Red 3D"><i class="fa-solid fa-cube"></i></a>
-    </nav>
-  </aside>
-  <main class="main">
-    <header class="topbar">
-      <div class="topbar-brand"><i class="fa-solid fa-cube"></i> Red Kennedy · 3D</div>
-      <div class="topbar-actions">
-        <button class="icon-btn" title="Restablecer" onclick="resetView()"><i class="fa-solid fa-compress"></i></button>
-        <button class="icon-btn" title="Exportar" onclick="window.print()"><i class="fa-solid fa-download"></i></button>
-      </div>
-    </header>
-    <div class="content">
-      <div class="canvas-wrap">
-        <canvas id="threeCanvas"></canvas>
-        <div class="zoom-controls">
-          <button onclick="zoomIn()"><i class="fa-solid fa-plus"></i></button>
-          <button onclick="zoomReset()">100%</button>
-          <button onclick="zoomOut()"><i class="fa-solid fa-minus"></i></button>
-        </div>
-      </div>
-      <aside class="sidebar-right">
-        <div class="panel">
-          <h3><i class="fa-solid fa-legend"></i> Leyenda</h3>
-          <div class="legend-item"><div class="legend-swatch solid"></div><div><b>Transformación prevista</b><br>Intervenciones y cambios orientados por el POT</div></div>
-          <div class="legend-item"><div class="legend-swatch dashed"></div><div><b>Impacto o relación hipotética</b><br>Relaciones entre usos, movilidad y ambiente</div></div>
-          <div class="legend-item"><div class="legend-swatch dotted"></div><div><b>Restricción o condicionante</b><br>Restricciones, protección y obligaciones territoriales</div></div>
-          <div class="legend-item"><div class="legend-swatch green"></div><div><b>Conectividad ecológica</b><br>Humedales, corredores y restauración</div></div>
-          <div class="legend-item"><div class="legend-dot"></div><div><b>Actor o nodo de decisión</b><br>Instituciones, comunidades y agentes</div></div>
-        </div>
-        <div class="panel">
-          <h3><i class="fa-solid fa-filter"></i> Filtros</h3>
-          <input type="search" class="search-box" placeholder="Buscar nodo..." id="searchInput" oninput="filterNodes()">
-          <div class="filter-group">
-            <label>Capa</label>
-            <select id="typeFilter" onchange="filterNodes()"><option value="all">Todas</option></select>
-          </div>
-          <div class="filter-group">
-            <label>Conexiones mínimas: <span id="minConnLabel">0</span></label>
-            <input type="range" id="minConn" min="0" max="10" value="0" oninput="filterNodes()">
-          </div>
-        </div>
-        <div class="panel">
-          <h3><i class="fa-solid fa-toggle-on"></i> Prender / Apagar Nodos</h3>
-          <div class="toggle-panel" id="togglePanel"></div>
-        </div>
-        <div class="panel" id="nodeDetails">
-          <h3><i class="fa-solid fa-crosshairs"></i> Inspección del nodo</h3>
-          <p>Haz clic en un nodo para ver sus conexiones. Doble clic para ocultar/mostrar.</p>
-        </div>
-      </aside>
-    </div>
-  </main>
+<div id="canvasContainer"><canvas id="sceneCanvas"></canvas></div>
+
+<!-- Top Header -->
+<div class="top-header" id="topHeader">
+  <div class="nav-group">
+    <div class="glass-panel brand-title"><i class="fa-solid fa-circle-nodes"></i> RED SOCIOECOLÓGICA KENNEDY</div>
+    <button class="glass-panel btn-flat active" onclick="toggleWelcome()"><i class="fa-solid fa-chart-pie"></i> Métricas</button>
+    <button class="glass-panel btn-flat active" onclick="toggleSideDrawer()"><i class="fa-solid fa-filter"></i> Filtro de Capas</button>
+    <button class="glass-panel btn-flat" onclick="restoreAll()"><i class="fa-solid fa-rotate-left"></i> Restablecer</button>
+    <input type="text" id="searchInput" placeholder="Buscar nodo..." oninput="searchNode(this.value)" class="glass-panel search-box">
+  </div>
+  <div class="nav-group">
+    <button class="glass-panel btn-flat active" id="btnLayoutHyp" onclick="setLayout('hyperbolic')">Hiperbólico</button>
+    <button class="glass-panel btn-flat" id="btnLayoutClust" onclick="setLayout('clustered')">Por Grupos</button>
+    <button class="glass-panel btn-flat" onclick="resetCamera()">Reset</button>
+  </div>
 </div>
-<div class="tooltip" id="tooltip"></div>
-<!-- Node Inspector Popup -->
-<div class="node-inspector" id="nodeInspector">
-  <div class="inspector-header">
-    <div>
-      <div class="node-title" id="mNodeTitle">Nodo</div>
-      <div class="node-subtitle" id="mNodeSubtitle">Tipo</div>
+
+<!-- Side Drawer -->
+<div class="glass-panel side-drawer" id="sideDrawer">
+  <div class="drawer-header">
+    <span>Capas Taxonómicas</span>
+    <div style="display:flex;gap:4px">
+      <button class="btn-flat" style="padding:2px 7px;font-size:9px" onclick="toggleAllCats(true)">Todas</button>
+      <button class="btn-flat" style="padding:2px 7px;font-size:9px" onclick="toggleAllCats(false)">Ninguna</button>
     </div>
+  </div>
+  <div class="cat-card" id="catCard0" style="--cat-color:#84A48B" onclick="toggleCat(0)">
+    <div class="cat-label-wrap"><div><div style="font-weight:700;color:#f8fafc">Estructura Ecológica</div><div style="font-size:9.5px;color:#94a3b8">Humedales, ríos y corredores</div></div></div>
+    <div style="display:flex;align-items:center;gap:8px"><span class="badge-count" id="badgeCat0">8</span><div class="toggle-box checked" id="toggleCat0" style="--toggle-bg:#84A48B"></div></div>
+  </div>
+  <div class="cat-card" id="catCard1" style="--cat-color:#38BDF8" onclick="toggleCat(1)">
+    <div class="cat-label-wrap"><div><div style="font-weight:700;color:#f8fafc">Servicios Públicos</div><div style="font-size:9.5px;color:#94a3b8">Canales, PTAR, data centers</div></div></div>
+    <div style="display:flex;align-items:center;gap:8px"><span class="badge-count" id="badgeCat1" style="color:#38BDF8">4</span><div class="toggle-box checked" id="toggleCat1" style="--toggle-bg:#38BDF8"></div></div>
+  </div>
+  <div class="cat-card" id="catCard2" style="--cat-color:#F59E0B" onclick="toggleCat(2)">
+    <div class="cat-label-wrap"><div><div style="font-weight:700;color:#f8fafc">Gestión de Riesgo</div><div style="font-size:9.5px;color:#94a3b8">Reasentamiento, inundaciones</div></div></div>
+    <div style="display:flex;align-items:center;gap:8px"><span class="badge-count" id="badgeCat2" style="color:#F59E0B">3</span><div class="toggle-box checked" id="toggleCat2" style="--toggle-bg:#F59E0B"></div></div>
+  </div>
+  <div class="cat-card" id="catCard3" style="--cat-color:#E89A6C" onclick="toggleCat(3)">
+    <div class="cat-label-wrap"><div><div style="font-weight:700;color:#f8fafc">Movilidad y Transporte</div><div style="font-size:9.5px;color:#94a3b8">Metro, TransMilenio, vías</div></div></div>
+    <div style="display:flex;align-items:center;gap:8px"><span class="badge-count" id="badgeCat3" style="color:#E89A6C">7</span><div class="toggle-box checked" id="toggleCat3" style="--toggle-bg:#E89A6C"></div></div>
+  </div>
+  <div class="cat-card" id="catCard4" style="--cat-color:#F5C945" onclick="toggleCat(4)">
+    <div class="cat-label-wrap"><div><div style="font-weight:700;color:#f8fafc">Actividades Económicas</div><div style="font-size:9.5px;color:#94a3b8">Corabastos, zona franca, logística</div></div></div>
+    <div style="display:flex;align-items:center;gap:8px"><span class="badge-count" id="badgeCat4" style="color:#F5C945">4</span><div class="toggle-box checked" id="toggleCat4" style="--toggle-bg:#F5C945"></div></div>
+  </div>
+  <div class="cat-card" id="catCard5" style="--cat-color:#8FD7C8" onclick="toggleCat(5)">
+    <div class="cat-label-wrap"><div><div style="font-weight:700;color:#f8fafc">Sistema de Cuidado</div><div style="font-size:9.5px;color:#94a3b8">Manzanas, hospitales, colegios</div></div></div>
+    <div style="display:flex;align-items:center;gap:8px"><span class="badge-count" id="badgeCat5" style="color:#8FD7C8">5</span><div class="toggle-box checked" id="toggleCat5" style="--toggle-bg:#8FD7C8"></div></div>
+  </div>
+  <div class="cat-card" id="catCard6" style="--cat-color:#A276F2" onclick="toggleCat(6)">
+    <div class="cat-label-wrap"><div><div style="font-weight:700;color:#f8fafc">Espacio Público y Cultural</div><div style="font-size:9.5px;color:#94a3b8">Parques, bibliotecas</div></div></div>
+    <div style="display:flex;align-items:center;gap:8px"><span class="badge-count" id="badgeCat6" style="color:#A276F2">3</span><div class="toggle-box checked" id="toggleCat6" style="--toggle-bg:#A276F2"></div></div>
+  </div>
+  <div class="cat-card" id="catCard7" style="--cat-color:#8E877F" onclick="toggleCat(7)">
+    <div class="cat-label-wrap"><div><div style="font-weight:700;color:#f8fafc">Suelo y Gobernanza</div><div style="font-size:9.5px;color:#94a3b8">Clasificación, instrumentos</div></div></div>
+    <div style="display:flex;align-items:center;gap:8px"><span class="badge-count" id="badgeCat7" style="color:#8E877F">10</span><div class="toggle-box checked" id="toggleCat7" style="--toggle-bg:#8E877F"></div></div>
+  </div>
+  <div class="cat-card" id="catCard8" style="--cat-color:#D9824E" onclick="toggleCat(8)">
+    <div class="cat-label-wrap"><div><div style="font-weight:700;color:#f8fafc">Seguridad e Informalidad</div><div style="font-size:9.5px;color:#94a3b8">CAI, tejidos informales</div></div></div>
+    <div style="display:flex;align-items:center;gap:8px"><span class="badge-count" id="badgeCat8" style="color:#D9824E">2</span><div class="toggle-box checked" id="toggleCat8" style="--toggle-bg:#D9824E"></div></div>
+  </div>
+</div>
+
+<!-- Node Inspector Popup -->
+<div class="glass-panel node-inspector" id="nodeInspector">
+  <div class="inspector-header">
+    <div><div class="node-title" id="mNodeTitle">Nodo</div><div class="node-subtitle" id="mNodeSubtitle">Tipo</div></div>
     <button class="btn-close" onclick="closeInspector()">&times;</button>
   </div>
   <div class="data-grid">
-    <div class="metric-card">
-      <div class="metric-val" id="mDegreeVal">0</div>
-      <div class="metric-lbl">Conexiones</div>
-    </div>
-    <div class="metric-card">
-      <div class="metric-val" id="mTypeVal">-</div>
-      <div class="metric-lbl">Capa</div>
-    </div>
+    <div class="metric-card"><div class="metric-val" id="mDegreeVal">0</div><div class="metric-lbl">Conexiones</div></div>
+    <div class="metric-card"><div class="metric-val" id="mTypeVal">-</div><div class="metric-lbl">Capa</div></div>
   </div>
   <div class="sec-header">Rol Ecológico y Nicho</div>
   <div class="text-content" id="mRoleBox">Descripción del rol territorial...</div>
@@ -163,445 +164,264 @@ body{background:var(--bg);color:var(--text);font-family:Inter,system-ui,sans-ser
   </div>
 </div>
 
+<!-- Welcome Modal -->
+<div class="welcome-overlay" id="welcomeModal">
+  <div class="welcome-modal">
+    <div class="welcome-header">
+      <div>
+        <div style="font-size:16px;font-weight:900;color:#84a48b;letter-spacing:0.5px"><i class="fa-solid fa-chart-pie"></i> SISTEMA SOCIOECOLÓGICO DE KENNEDY — MÉTRICAS</div>
+        <div style="font-size:11px;color:#94a3b8;margin-top:2px">Distribución funcional y composición taxonómica del modelo (49 nodos)</div>
+      </div>
+      <div style="display:flex;gap:8px">
+        <button class="btn-flat" onclick="closeWelcome()">Explorar Red 3D →</button>
+      </div>
+    </div>
+    <div class="pie-grid">
+      <div class="pie-card">
+        <div class="pie-card-title">1. Tipos de interacciones</div>
+        <div class="pie-card-desc">Distribución de las relaciones funcionales registradas en la red socioecológica de Kennedy.</div>
+        <div class="donut-wrap"><svg viewBox="0 0 200 200" id="donutA"></svg></div>
+        <div id="legendA"></div>
+      </div>
+      <div class="pie-card">
+        <div class="pie-card-title">2. Convenciones taxonómicas</div>
+        <div class="pie-card-desc">Distribución de las capas del modelo socioecológico de Kennedy.</div>
+        <div class="donut-wrap"><svg viewBox="0 0 200 200" id="donutB"></svg></div>
+        <div id="legendB"></div>
+      </div>
+    </div>
+    <div style="display:flex;justify-content:space-between;align-items:center;border-top:1px solid rgba(255,255,255,0.1);padding-top:14px">
+      <span style="font-size:10.5px;color:#94a3b8">Puedes volver a abrir estas métricas con el botón "Métricas" de la barra superior.</span>
+      <button class="btn-flat active" onclick="closeWelcome()" style="padding:9px 24px;font-size:12px;font-weight:800;background:linear-gradient(135deg,#84a48b,#6B9080);color:#000;border:none">Entendido, Ingresar al Visor</button>
+    </div>
+  </div>
+</div>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script>
 const nodes=[
-{id:"G1_N10",label:"Humedal La Vaca",type:"Estructura_Ecologica",icon:"fa-water"},
-{id:"G1_N11",label:"Humedal El Burro",type:"Estructura_Ecologica",icon:"fa-water"},
-{id:"G1_N14",label:"Humedal Techo",type:"Estructura_Ecologica",icon:"fa-water"},
-{id:"G1_N21",label:"Rio Fucha",type:"Estructura_Ecologica",icon:"fa-water"},
-{id:"G1_N28",label:"Quebrada Limas",type:"Estructura_Ecologica",icon:"fa-water"},
-{id:"G1_N01",label:"Rio Bogota",type:"Estructura_Ecologica",icon:"fa-water"},
-{id:"G1_N36",label:"Corredor Ecologico Ronda Rio Bogota",type:"Estructura_Ecologica",icon:"fa-tree"},
-{id:"G1_N38",label:"Area Manejo Especial Rio Bogota",type:"Estructura_Ecologica",icon:"fa-shield-halved"},
-{id:"G8_N30",label:"Canal Cundinamarca",type:"Servicios_Publicos",icon:"fa-faucet-drip"},
-{id:"G8_N31",label:"Canal Americas",type:"Servicios_Publicos",icon:"fa-faucet-drip"},
-{id:"G2_N06",label:"Zonas Reasentamiento Prioritario",type:"Gestion_Riesgo",icon:"fa-triangle-exclamation"},
-{id:"G2_N07",label:"Suelos Proteccion Riesgo no Mitigable",type:"Gestion_Riesgo",icon:"fa-triangle-exclamation"},
-{id:"G2_N20",label:"Puntos Criticos Inundacion",type:"Gestion_Riesgo",icon:"fa-water"},
-{id:"G4_N01",label:"Primera Linea Metro PLMB",type:"Movilidad_Transporte",icon:"fa-train"},
-{id:"G4_N10",label:"Corredor Verde Av Ciudad Cali",type:"Movilidad_Transporte",icon:"fa-road"},
-{id:"G4_N18",label:"Avenida Longitudinal Occidente ALO",type:"Movilidad_Transporte",icon:"fa-road"},
-{id:"G4_N21",label:"Patio Taller Metro Bosa",type:"Movilidad_Transporte",icon:"fa-warehouse"},
-{id:"G4_N17",label:"Red Ciclorrutas Prioritarias",type:"Movilidad_Transporte",icon:"fa-bicycle"},
-{id:"G4_N25",label:"Portal Americas TransMilenio",type:"Movilidad_Transporte",icon:"fa-bus"},
-{id:"G4_N26",label:"Avenida Boyaca",type:"Movilidad_Transporte",icon:"fa-road"},
-{id:"G5_N05",label:"Nodo Logistico Calle 13",type:"Actividades_Economicas",icon:"fa-truck"},
-{id:"G5_N10",label:"Centro Abasto Corabastos",type:"Actividades_Economicas",icon:"fa-store"},
-{id:"G5_N14",label:"Plaza Mercado Fontibon",type:"Actividades_Economicas",icon:"fa-store"},
-{id:"G5_N02",label:"Zona Franca Fontibon",type:"Actividades_Economicas",icon:"fa-industry"},
-{id:"G8_N22",label:"Data Center Fontibon",type:"Servicios_Publicos",icon:"fa-server"},
-{id:"G8_N17",label:"PTAR Canoas",type:"Servicios_Publicos",icon:"fa-recycle"},
-{id:"G6_N05",label:"Manzana Cuidado Kennedy",type:"Sistema_Cuidado",icon:"fa-hands-holding-child"},
-{id:"G6_N20",label:"Hospital Kennedy",type:"Sistema_Cuidado",icon:"fa-hospital"},
-{id:"G6_N01",label:"Manzana Cuidado Bosa",type:"Sistema_Cuidado",icon:"fa-hands-holding-child"},
-{id:"G6_N11",label:"Hospital Bosa",type:"Sistema_Cuidado",icon:"fa-hospital"},
-{id:"G6_N17",label:"Colegio Sede Bosa Porvenir",type:"Sistema_Cuidado",icon:"fa-school"},
-{id:"G7_N03",label:"Parque Metropolitano Timiza",type:"Espacio_Publico",icon:"fa-tree"},
-{id:"G7_N08",label:"Alameda El Porvenir",type:"Espacio_Publico",icon:"fa-tree"},
-{id:"G11_N01",label:"Biblioteca Publica El Tintal",type:"Equipamiento_Cultural",icon:"fa-book-open"},
-{id:"G10_N01",label:"CAI Estacion Policia Corabastos",type:"Seguridad",icon:"fa-shield-halved"},
-{id:"G3_N12",label:"Tratamiento Desarrollo Zona Occidente",type:"Clasificacion_Suelo",icon:"fa-map"},
-{id:"G3_N14",label:"Mejoramiento Integral Estructural",type:"Clasificacion_Suelo",icon:"fa-map"},
-{id:"G3_N15",label:"Mejoramiento Integral Habitabilidad",type:"Clasificacion_Suelo",icon:"fa-map"},
-{id:"G3_N18",label:"Areas Industrial y Logistica",type:"Clasificacion_Suelo",icon:"fa-map"},
-{id:"G12_N01",label:"Tejido Urbano Informal Patio Bonito",type:"Habitabilidad_Informalidad",icon:"fa-house-chimney"},
-{id:"G9_N03",label:"Reparto Cargas y Beneficios",type:"Gobernanza_Instrumentos",icon:"fa-scale-balanced"},
-{id:"G9_N17",label:"Subsidio Distrital Vivienda",type:"Gobernanza_Instrumentos",icon:"fa-hand-holding-dollar"},
-{id:"G9_N11",label:"Empresa Renovacion Urbano ERU",type:"Gobernanza_Instrumentos",icon:"fa-building"},
-{id:"G9_N19",label:"Macroproyectos Interes Social MIS",type:"Gobernanza_Instrumentos",icon:"fa-handshake"},
-{id:"G9_N18",label:"Comision Veeduria Ciudadana POT",type:"Gobernanza_Instrumentos",icon:"fa-users"}
+{id:"G1_N10",label:"Humedal La Vaca",type:"Estructura_Ecologica"},{id:"G1_N11",label:"Humedal El Burro",type:"Estructura_Ecologica"},{id:"G1_N14",label:"Humedal Techo",type:"Estructura_Ecologica"},{id:"G1_N21",label:"Rio Fucha",type:"Estructura_Ecologica"},{id:"G1_N28",label:"Quebrada Limas",type:"Estructura_Ecologica"},{id:"G1_N01",label:"Rio Bogota",type:"Estructura_Ecologica"},{id:"G1_N36",label:"Corredor Ecologico Ronda Rio Bogota",type:"Estructura_Ecologica"},{id:"G1_N38",label:"Area Manejo Especial Rio Bogota",type:"Estructura_Ecologica"},
+{id:"G8_N30",label:"Canal Cundinamarca",type:"Servicios_Publicos"},{id:"G8_N31",label:"Canal Americas",type:"Servicios_Publicos"},{id:"G8_N22",label:"Data Center Fontibon",type:"Servicios_Publicos"},{id:"G8_N17",label:"PTAR Canoas",type:"Servicios_Publicos"},
+{id:"G2_N06",label:"Zonas Reasentamiento Prioritario",type:"Gestion_Riesgo"},{id:"G2_N07",label:"Suelos Proteccion Riesgo",type:"Gestion_Riesgo"},{id:"G2_N20",label:"Puntos Criticos Inundacion",type:"Gestion_Riesgo"},
+{id:"G4_N01",label:"Primera Linea Metro PLMB",type:"Movilidad_Transporte"},{id:"G4_N10",label:"Corredor Verde Av Cali",type:"Movilidad_Transporte"},{id:"G4_N18",label:"ALO Sur",type:"Movilidad_Transporte"},{id:"G4_N21",label:"Patio Taller Metro Bosa",type:"Movilidad_Transporte"},{id:"G4_N17",label:"Red Ciclorrutas",type:"Movilidad_Transporte"},{id:"G4_N25",label:"Portal Americas",type:"Movilidad_Transporte"},{id:"G4_N26",label:"Avenida Boyaca",type:"Movilidad_Transporte"},
+{id:"G5_N05",label:"Nodo Logistico Calle 13",type:"Actividades_Economicas"},{id:"G5_N10",label:"Corabastos",type:"Actividades_Economicas"},{id:"G5_N14",label:"Plaza Mercado Fontibon",type:"Actividades_Economicas"},{id:"G5_N02",label:"Zona Franca Fontibon",type:"Actividades_Economicas"},
+{id:"G6_N05",label:"Manzana Cuidado Kennedy",type:"Sistema_Cuidado"},{id:"G6_N20",label:"Hospital Kennedy",type:"Sistema_Cuidado"},{id:"G6_N01",label:"Manzana Cuidado Bosa",type:"Sistema_Cuidado"},{id:"G6_N11",label:"Hospital Bosa",type:"Sistema_Cuidado"},{id:"G6_N17",label:"Colegio Bosa Porvenir",type:"Sistema_Cuidado"},
+{id:"G7_N03",label:"Parque Timiza",type:"Espacio_Publico"},{id:"G7_N08",label:"Alameda El Porvenir",type:"Espacio_Publico"},{id:"G11_N01",label:"Biblioteca El Tintal",type:"Equipamiento_Cultural"},
+{id:"G10_N01",label:"CAI Policia Corabastos",type:"Seguridad"},
+{id:"G3_N12",label:"Tratamiento Desarrollo Occidente",type:"Clasificacion_Suelo"},{id:"G3_N14",label:"Mejoramiento Estructural",type:"Clasificacion_Suelo"},{id:"G3_N15",label:"Mejoramiento Habitabilidad",type:"Clasificacion_Suelo"},{id:"G3_N18",label:"Areas Industrial Logistica",type:"Clasificacion_Suelo"},
+{id:"G12_N01",label:"Tejido Informal Patio Bonito",type:"Habitabilidad_Informalidad"},
+{id:"G9_N03",label:"Reparto Cargas Beneficios",type:"Gobernanza_Instrumentos"},{id:"G9_N17",label:"Subsidio Vivienda",type:"Gobernanza_Instrumentos"},{id:"G9_N11",label:"ERU",type:"Gobernanza_Instrumentos"},{id:"G9_N19",label:"MIS",type:"Gobernanza_Instrumentos"},{id:"G9_N18",label:"Veeduria Ciudadana",type:"Gobernanza_Instrumentos"}
 ];
-
-const edges=[
-{from:"G1_N01",to:"G1_N21",type:"green"},{from:"G1_N01",to:"G1_N28",type:"green"},{from:"G1_N01",to:"G1_N36",type:"green"},{from:"G1_N10",to:"G1_N11",type:"green"},{from:"G1_N10",to:"G1_N14",type:"green"},{from:"G1_N11",to:"G1_N14",type:"green"},{from:"G1_N21",to:"G1_N28",type:"green"},{from:"G1_N36",to:"G1_N38",type:"green"},{from:"G8_N30",to:"G8_N31",type:"solid"},{from:"G8_N17",to:"G8_N22",type:"solid"},{from:"G2_N06",to:"G2_N07",type:"dotted"},{from:"G2_N06",to:"G2_N20",type:"dotted"},{from:"G2_N07",to:"G2_N20",type:"dotted"},{from:"G4_N01",to:"G4_N21",type:"solid"},{from:"G4_N01",to:"G4_N25",type:"solid"},{from:"G4_N10",to:"G4_N18",type:"solid"},{from:"G4_N10",to:"G4_N26",type:"solid"},{from:"G4_N17",to:"G4_N26",type:"solid"},{from:"G4_N18",to:"G4_N26",type:"solid"},{from:"G4_N25",to:"G4_N26",type:"solid"},{from:"G4_N21",to:"G4_N25",type:"solid"},{from:"G5_N05",to:"G5_N10",type:"solid"},{from:"G5_N05",to:"G5_N02",type:"solid"},{from:"G5_N10",to:"G5_N14",type:"solid"},{from:"G5_N10",to:"G10_N01",type:"solid"},{from:"G5_N14",to:"G5_N02",type:"solid"},{from:"G6_N05",to:"G6_N20",type:"solid"},{from:"G6_N01",to:"G6_N11",type:"solid"},{from:"G6_N01",to:"G6_N17",type:"solid"},{from:"G6_N05",to:"G6_N01",type:"solid"},{from:"G6_N20",to:"G6_N11",type:"solid"},{from:"G7_N03",to:"G7_N08",type:"green"},{from:"G7_N03",to:"G1_N10",type:"green"},{from:"G3_N12",to:"G3_N14",type:"dashed"},{from:"G3_N12",to:"G3_N15",type:"dashed"},{from:"G3_N14",to:"G3_N15",type:"dashed"},{from:"G3_N18",to:"G5_N02",type:"dashed"},{from:"G3_N18",to:"G5_N05",type:"dashed"},{from:"G9_N03",to:"G9_N17",type:"dotted"},{from:"G9_N03",to:"G9_N19",type:"dotted"},{from:"G9_N11",to:"G9_N18",type:"dotted"},{from:"G9_N17",to:"G9_N19",type:"dotted"},{from:"G9_N11",to:"G9_N19",type:"dotted"},{from:"G12_N01",to:"G6_N01",type:"dashed"},{from:"G12_N01",to:"G2_N06",type:"dashed"},{from:"G11_N01",to:"G7_N03",type:"solid"},{from:"G11_N01",to:"G6_N05",type:"solid"},{from:"G8_N22",to:"G5_N02",type:"solid"},{from:"G8_N17",to:"G1_N21",type:"green"},{from:"G4_N25",to:"G5_N10",type:"solid"},{from:"G4_N26",to:"G3_N12",type:"dashed"},{from:"G6_N20",to:"G10_N01",type:"solid"},{from:"G7_N08",to:"G4_N10",type:"solid"},{from:"G9_N18",to:"G3_N12",type:"dotted"},{from:"G9_N17",to:"G6_N01",type:"solid"},{from:"G1_N38",to:"G2_N20",type:"dotted"},{from:"G8_N30",to:"G1_N21",type:"green"},{from:"G5_N14",to:"G10_N01",type:"solid"},{from:"G6_N17",to:"G6_N01",type:"solid"},{from:"G4_N17",to:"G7_N03",type:"solid"},{from:"G3_N15",to:"G12_N01",type:"dashed"},{from:"G9_N03",to:"G3_N14",type:"dotted"},{from:"G8_N31",to:"G4_N26",type:"solid"},{from:"G2_N07",to:"G12_N01",type:"dashed"},{from:"G5_N05",to:"G4_N26",type:"solid"},{from:"G6_N11",to:"G10_N01",type:"solid"},{from:"G7_N08",to:"G6_N05",type:"solid"},{from:"G1_N36",to:"G7_N03",type:"green"},{from:"G4_N18",to:"G3_N18",type:"dashed"},{from:"G9_N11",to:"G3_N12",type:"dotted"},{from:"G8_N22",to:"G4_N01",type:"solid"},{from:"G1_N14",to:"G7_N03",type:"green"},{from:"G2_N20",to:"G8_N17",type:"dotted"},{from:"G5_N02",to:"G8_N22",type:"solid"},{from:"G6_N20",to:"G9_N17",type:"solid"},{from:"G4_N21",to:"G5_N05",type:"solid"},{from:"G3_N15",to:"G6_N01",type:"dashed"},{from:"G11_N01",to:"G4_N10",type:"solid"},{from:"G10_N01",to:"G4_N25",type:"solid"},{from:"G1_N28",to:"G8_N30",type:"green"},{from:"G7_N08",to:"G12_N01",type:"dashed"},{from:"G9_N19",to:"G5_N10",type:"solid"},{from:"G8_N17",to:"G2_N20",type:"dotted"}
-];
-
+const edges=[{from:"G1_N01",to:"G1_N21"},{from:"G1_N01",to:"G1_N28"},{from:"G1_N01",to:"G1_N36"},{from:"G1_N10",to:"G1_N11"},{from:"G1_N10",to:"G1_N14"},{from:"G1_N11",to:"G1_N14"},{from:"G1_N21",to:"G1_N28"},{from:"G1_N36",to:"G1_N38"},{from:"G8_N30",to:"G8_N31"},{from:"G8_N17",to:"G8_N22"},{from:"G2_N06",to:"G2_N07"},{from:"G2_N06",to:"G2_N20"},{from:"G2_N07",to:"G2_N20"},{from:"G4_N01",to:"G4_N21"},{from:"G4_N01",to:"G4_N25"},{from:"G4_N10",to:"G4_N18"},{from:"G4_N10",to:"G4_N26"},{from:"G4_N17",to:"G4_N26"},{from:"G4_N18",to:"G4_N26"},{from:"G4_N25",to:"G4_N26"},{from:"G4_N21",to:"G4_N25"},{from:"G5_N05",to:"G5_N10"},{from:"G5_N05",to:"G5_N02"},{from:"G5_N10",to:"G5_N14"},{from:"G5_N10",to:"G10_N01"},{from:"G5_N14",to:"G5_N02"},{from:"G6_N05",to:"G6_N20"},{from:"G6_N01",to:"G6_N11"},{from:"G6_N01",to:"G6_N17"},{from:"G6_N05",to:"G6_N01"},{from:"G6_N20",to:"G6_N11"},{from:"G7_N03",to:"G7_N08"},{from:"G7_N03",to:"G1_N10"},{from:"G3_N12",to:"G3_N14"},{from:"G3_N12",to:"G3_N15"},{from:"G3_N14",to:"G3_N15"},{from:"G3_N18",to:"G5_N02"},{from:"G3_N18",to:"G5_N05"},{from:"G9_N03",to:"G9_N17"},{from:"G9_N03",to:"G9_N19"},{from:"G9_N11",to:"G9_N18"},{from:"G9_N17",to:"G9_N19"},{from:"G9_N11",to:"G9_N19"},{from:"G12_N01",to:"G6_N01"},{from:"G12_N01",to:"G2_N06"},{from:"G11_N01",to:"G7_N03"},{from:"G11_N01",to:"G6_N05"},{from:"G8_N22",to:"G5_N02"},{from:"G8_N17",to:"G1_N21"},{from:"G4_N25",to:"G5_N10"},{from:"G4_N26",to:"G3_N12"},{from:"G6_N20",to:"G10_N01"},{from:"G7_N08",to:"G4_N10"},{from:"G9_N18",to:"G3_N12"},{from:"G9_N17",to:"G6_N01"},{from:"G1_N38",to:"G2_N20"},{from:"G8_N30",to:"G1_N21"},{from:"G5_N14",to:"G10_N01"},{from:"G6_N17",to:"G6_N01"},{from:"G4_N17",to:"G7_N03"},{from:"G3_N15",to:"G12_N01"},{from:"G9_N03",to:"G3_N14"},{from:"G8_N31",to:"G4_N26"},{from:"G2_N07",to:"G12_N01"},{from:"G5_N05",to:"G4_N26"},{from:"G6_N11",to:"G10_N01"},{from:"G7_N08",to:"G6_N05"},{from:"G1_N36",to:"G7_N03"},{from:"G4_N18",to:"G3_N18"},{from:"G9_N11",to:"G3_N12"},{from:"G8_N22",to:"G4_N01"},{from:"G1_N14",to:"G7_N03"},{from:"G2_N20",to:"G8_N17"},{from:"G5_N02",to:"G8_N22"},{from:"G6_N20",to:"G9_N17"},{from:"G4_N21",to:"G5_N05"},{from:"G3_N15",to:"G6_N01"},{from:"G11_N01",to:"G4_N10"},{from:"G10_N01",to:"G4_N25"},{from:"G1_N28",to:"G8_N30"},{from:"G7_N08",to:"G12_N01"},{from:"G9_N19",to:"G5_N10"},{from:"G8_N17",to:"G2_N20"}];
 const typeColors={"Estructura_Ecologica":"#8fd7c8","Servicios_Publicos":"#5b9def","Gestion_Riesgo":"#d9824e","Movilidad_Transporte":"#e89a6c","Actividades_Economicas":"#f5c945","Sistema_Cuidado":"#8fd7c8","Espacio_Publico":"#8fd7c8","Equipamiento_Cultural":"#a276f2","Seguridad":"#d9824e","Clasificacion_Suelo":"#8e877f","Habitabilidad_Informalidad":"#e89a6c","Gobernanza_Instrumentos":"#a276f2"};
-const edgeStyles={"solid":{color:"#5b9def",width:2,dash:null},"dashed":{color:"#e89a6c",width:2,dash:[8,4]},"dotted":{color:"#d9824e",width:2,dash:[2,4]},"green":{color:"#8fd7c8",width:2.5,dash:null}};
+const typeOrder=["Estructura_Ecologica","Servicios_Publicos","Gestion_Riesgo","Movilidad_Transporte","Actividades_Economicas","Sistema_Cuidado","Espacio_Publico","Equipamiento_Cultural","Seguridad","Clasificacion_Suelo","Habitabilidad_Informalidad","Gobernanza_Instrumentos"];
+const catMapping=[0,0,0,0,0,0,0,0,1,1,1,1,2,2,2,3,3,3,3,3,3,3,4,4,4,4,5,5,5,5,5,6,6,7,8,9,9,9,9,10,11,11,11,11,11];
 
-let scene,camera,renderer,raycaster,mouse;
-let nodeObjects=[],edgeObjects=[],labelSprites=[];
-let zoom=1,selectedNode=null,hiddenNodes=new Set();
-let isPanning=false,panX=0,panY=0;
-
-function getNode(id){return nodes.find(n=>n.id===id)}
-function getNodeConnections(id){return edges.filter(e=>e.from===id||e.to===id)}
-function isHub(id){return getNodeConnections(id).length>=4}
+let scene,camera,renderer,raycaster,nodeObjects=[],hiddenNodes=new Set(),selectedNode=null;
+let autoRotate=true;
 
 function init(){
-  const canvas=document.getElementById('threeCanvas');
-  const wrap=canvas.parentElement;
-  
-  scene=new THREE.Scene();
-  scene.background=new THREE.Color(0x0b0c0f);
-  
-  camera=new THREE.PerspectiveCamera(60,wrap.clientWidth/wrap.clientHeight,0.1,2000);
+  const canvas=document.getElementById('sceneCanvas');
+  const wrap=document.getElementById('canvasContainer');
+  scene=new THREE.Scene();scene.background=new THREE.Color(0x000000);
+  camera=new THREE.PerspectiveCamera(60,wrap.clientWidth/wrap.clientHeight,0.1,5000);
   camera.position.set(0,0,800);
-  
   renderer=new THREE.WebGLRenderer({canvas:canvas,antialias:true});
   renderer.setSize(wrap.clientWidth,wrap.clientHeight);
-  renderer.setPixelRatio(window.devicePixelRatio);
-  
   raycaster=new THREE.Raycaster();
-  mouse=new THREE.Vector2();
-  
-  // Lights
-  const ambientLight=new THREE.AmbientLight(0xffffff,0.6);
-  scene.add(ambientLight);
-  const directionalLight=new THREE.DirectionalLight(0xffffff,0.8);
-  directionalLight.position.set(100,100,100);
-  scene.add(directionalLight);
-  
-  // Grid
-  const gridHelper=new THREE.GridHelper(1200,30,0x222222,0x111111);
-  gridHelper.position.y=-200;
-  scene.add(gridHelper);
-  
+  const ambient=new THREE.AmbientLight(0xffffff,0.6);scene.add(ambient);
+  const dir=new THREE.DirectionalLight(0xffffff,0.8);dir.position.set(100,100,100);scene.add(dir);
   createNetwork();
-  populateFilters();
   setupInteractions(canvas);
+  buildDonuts();
   animate();
 }
 
 function createNetwork(){
-  // Calculate hub positions in 3D
-  const hubs=nodes.filter(n=>isHub(n.id));
-  const others=nodes.filter(n=>!isHub(n.id));
   const positions={};
-  
-  // Hubs in a sphere around center
-  hubs.forEach((h,i)=>{
-    const phi=Math.acos(-1+(2*i)/hubs.length);
-    const theta=Math.sqrt(hubs.length*Math.PI)*phi;
-    positions[h.id]=new THREE.Vector3(
-      200*Math.cos(theta)*Math.sin(phi),
-      200*Math.sin(theta)*Math.sin(phi),
-      200*Math.cos(phi)
-    );
-  });
-  
-  // Others distributed in outer shell
-  others.forEach((n,i)=>{
-    const phi=Math.acos(-1+(2*i)/others.length);
-    const theta=Math.sqrt(others.length*Math.PI)*phi;
-    const r=350+(i%3)*50;
-    positions[n.id]=new THREE.Vector3(
-      r*Math.cos(theta)*Math.sin(phi),
-      r*Math.sin(theta)*Math.sin(phi),
-      r*Math.cos(phi)
-    );
-  });
-  
-  // Create node meshes
+  const hubs=nodes.filter(n=>isHub(n.id)),others=nodes.filter(n=>!isHub(n.id));
+  hubs.forEach((h,i)=>{const a=(i/hubs.length)*Math.PI*2-Math.PI/2;positions[h.id]=new THREE.Vector3(200*Math.cos(a),200*Math.sin(a),100*Math.sin(a*2))});
+  others.forEach((n,i)=>{const a=(i/others.length)*Math.PI*2,r=350+(i%3)*50;positions[n.id]=new THREE.Vector3(r*Math.cos(a),r*Math.sin(a),150*Math.sin(a*3))});
   nodes.forEach(n=>{
-    const color=typeColors[n.type]||'#888';
-    const radius=isHub(n.id)?18:12;
-    const geometry=new THREE.SphereGeometry(radius,32,32);
-    const material=new THREE.MeshPhongMaterial({color:color,emissive:color,emissiveIntensity:0.2});
-    const mesh=new THREE.Mesh(geometry,material);
-    mesh.position.copy(positions[n.id]);
-    mesh.userData={id:n.id};
-    scene.add(mesh);
-    nodeObjects.push(mesh);
-    
-    // Label sprite
-    const canvas2=document.createElement('canvas');
-    const ctx=canvas2.getContext('2d');
-    canvas2.width=256;canvas2.height=64;
-    ctx.fillStyle='#f2ece3';
-    ctx.font='bold 24px Inter, sans-serif';
-    ctx.textAlign='center';
-    ctx.fillText(n.id,128,40);
-    const texture=new THREE.CanvasTexture(canvas2);
-    const spriteMaterial=new THREE.SpriteMaterial({map:texture,transparent:true});
-    const sprite=new THREE.Sprite(spriteMaterial);
-    sprite.position.copy(positions[n.id]);
-    sprite.position.y+=radius+15;
-    sprite.scale.set(60,15,1);
-    scene.add(sprite);
-    labelSprites.push(sprite);
+    const color=new THREE.Color(typeColors[n.type]||'#888');
+    const geo=new THREE.SphereGeometry(isHub(n.id)?18:11,32,32);
+    const mat=new THREE.MeshPhongMaterial({color:color,emissive:color,emissiveIntensity:0.3});
+    const mesh=new THREE.Mesh(geo,mat);
+    mesh.position.copy(positions[n.id]);mesh.userData={id:n.id};
+    scene.add(mesh);nodeObjects.push(mesh);
   });
-  
-  // Create edges
   edges.forEach(e=>{
-    const f=nodes.find(n=>n.id===e.from);
-    const t=nodes.find(n=>n.id===e.to);
+    const f=nodes.find(n=>n.id===e.from),t=nodes.find(n=>n.id===e.to);
     if(!f||!t)return;
-    
-    const fromPos=positions[e.from];
-    const toPos=positions[e.to];
-    const style=edgeStyles[e.type]||edgeStyles.solid;
-    
-    const material=new THREE.LineDashedMaterial({
-      color:style.color,
-      linewidth:style.width,
-      dashSize:style.dash?style.dash[0]:0,
-      gapSize:style.dash?style.dash[1]:0,
-      transparent:true,
-      opacity:0.6
-    });
-    
-    const geometry=new THREE.BufferGeometry().setFromPoints([fromPos,toPos]);
-    const line=new THREE.Line(geometry,material);
-    line.computeLineDistances();
-    scene.add(line);
-    edgeObjects.push(line);
+    const color=new THREE.Color(typeColors[f.type]||'#888');
+    const mat=new THREE.LineBasicMaterial({color:color,transparent:true,opacity:0.4});
+    const geo=new THREE.BufferGeometry().setFromPoints([positions[e.from],positions[e.to]]);
+    scene.add(new THREE.Line(geo,mat));
   });
 }
 
-function populateFilters(){
-  const tf=document.getElementById('typeFilter');
-  Object.keys(typeColors).forEach(t=>{
-    const o=document.createElement('option');o.value=t;o.textContent=t.replace(/_/g,' ');tf.appendChild(o);
-  });
-  renderTogglePanel();
-}
-
-function renderTogglePanel(){
-  const p=document.getElementById('togglePanel');p.innerHTML='';
-  nodes.forEach(n=>{
-    const a=!hiddenNodes.has(n.id),b=document.createElement('button');
-    b.className='toggle-btn'+(a?' active':'');b.textContent=n.id;
-    b.onclick=()=>{if(hiddenNodes.has(n.id))hiddenNodes.delete(n.id);else hiddenNodes.add(n.id);updateVisibility()};
-    p.appendChild(b);
-  });
-}
-
-function updateVisibility(){
-  nodeObjects.forEach(obj=>{
-    const id=obj.userData.id;
-    obj.visible=!hiddenNodes.has(id);
-  });
-  labelSprites.forEach((sprite,i)=>{
-    const id=nodes[i].id;
-    sprite.visible=!hiddenNodes.has(id);
-  });
-  edgeObjects.forEach((line,i)=>{
-    const e=edges[i];
-    line.visible=!hiddenNodes.has(e.from)&&!hiddenNodes.has(e.to);
-  });
-  updateStats();
-  renderTogglePanel();
-}
-
-function filterNodes(){
-  const s=document.getElementById('searchInput').value.toLowerCase(),
-    tf=document.getElementById('typeFilter').value,
-    mc=parseInt(document.getElementById('minConn').value);
-  document.getElementById('minConnLabel').textContent=mc;
-  hiddenNodes.clear();
-  nodes.forEach(n=>{
-    const c=getNodeConnections(n.id).length,
-      ms=n.label.toLowerCase().includes(s)||n.id.toLowerCase().includes(s),
-      mt=tf==='all'||n.type===tf,mc2=c>=mc;
-    if(!ms||!mt||!mc2)hiddenNodes.add(n.id);
-  });
-  updateVisibility();
-}
-
-function updateStats(){
-  const vn=nodes.filter(n=>!hiddenNodes.has(n.id)),
-    ve=edges.filter(e=>!hiddenNodes.has(e.from)&&!hiddenNodes.has(e.to)),
-    hubs=vn.filter(n=>isHub(n.id)).length,
-    me=vn.length*(vn.length-1)/2,d=me>0?Math.round((ve.length/me)*100):0;
-  document.getElementById('statNodes').textContent=vn.length;
-  document.getElementById('statEdges').textContent=ve.length;
-  document.getElementById('statHubs').textContent=hubs;
-  document.getElementById('statDensity').textContent=d+'%';
-}
+function isHub(id){return getNodeConnections(id).length>=4}
+function getNode(id){return nodes.find(n=>n.id===id)}
+function getNodeConnections(id){return edges.filter(e=>e.from===id||e.to===id)}
 
 function setupInteractions(canvas){
-  let isDragging=false,startX,startY;
-  
-  canvas.addEventListener('mousedown',e=>{
-    isDragging=true;startX=e.clientX;startY=e.clientY;
-  });
-  
+  let isDragging=false,sx,sy;
+  canvas.addEventListener('mousedown',e=>{isDragging=true;sx=e.clientX;sy=e.clientY});
   canvas.addEventListener('mousemove',e=>{
-    if(isDragging){
-      const dx=e.clientX-startX,dy=e.clientY-startY;
-      camera.position.x-=dx*0.5;
-      camera.position.y+=dy*0.5;
-      startX=e.clientX;startY=e.clientY;
-    }
-    // Raycaster for hover
+    if(isDragging){camera.position.x-=(e.clientX-sx)*0.5;camera.position.y+=(e.clientY-sy)*0.5;sx=e.clientX;sy=e.clientY}
     const rect=canvas.getBoundingClientRect();
-    mouse.x=((e.clientX-rect.left)/rect.width)*2-1;
-    mouse.y=-((e.clientY-rect.top)/rect.height)*2+1;
+    const mouse=new THREE.Vector2(((e.clientX-rect.left)/rect.width)*2-1,-((e.clientY-rect.top)/rect.height)*2+1);
     raycaster.setFromCamera(mouse,camera);
-    const intersects=raycaster.intersectObjects(nodeObjects.filter(o=>o.visible));
-    const tooltip=document.getElementById('tooltip');
-    if(intersects.length>0){
-      const n=getNode(intersects[0].object.userData.id);
-      const c=getNodeConnections(n.id);
-      tooltip.innerHTML=`<strong>${n.id} · ${n.type.replace(/_/g,' ')}</strong><span>${n.label}</span><span>${c.length} conexiones${isHub(n.id)?' · <b style="color:var(--yellow)">Hub</b>':''}</span>`;
-      tooltip.style.left=(e.clientX+12)+'px';tooltip.style.top=(e.clientY+12)+'px';tooltip.classList.add('visible');
-      canvas.style.cursor='pointer';
-    }else{
-      tooltip.classList.remove('visible');
-      canvas.style.cursor=isDragging?'grabbing':'grab';
-    }
+    const hits=raycaster.intersectObjects(nodeObjects.filter(o=>!hiddenNodes.has(o.userData.id)));
+    canvas.style.cursor=hits.length>0?'pointer':'crosshair';
   });
-  
-  canvas.addEventListener('mouseup',()=>{isDragging=false});
-  canvas.addEventListener('mouseleave',()=>{isDragging=false;document.getElementById('tooltip').classList.remove('visible')});
-  
+  canvas.addEventListener('mouseup',()=>isDragging=false);
+  canvas.addEventListener('mouseleave',()=>isDragging=false);
   canvas.addEventListener('click',e=>{
     const rect=canvas.getBoundingClientRect();
-    mouse.x=((e.clientX-rect.left)/rect.width)*2-1;
-    mouse.y=-((e.clientY-rect.top)/rect.height)*2+1;
+    const mouse=new THREE.Vector2(((e.clientX-rect.left)/rect.width)*2-1,-((e.clientY-rect.top)/rect.height)*2+1);
     raycaster.setFromCamera(mouse,camera);
-    const intersects=raycaster.intersectObjects(nodeObjects.filter(o=>o.visible));
-    if(intersects.length>0){
-      selectNode(intersects[0].object.userData.id);
-      showInspector(intersects[0].object.userData.id);
-    }
+    const hits=raycaster.intersectObjects(nodeObjects.filter(o=>!hiddenNodes.has(o.userData.id)));
+    if(hits.length>0){selectNode(hits[0].object.userData.id);showInspector(hits[0].object.userData.id)}
   });
-  
   canvas.addEventListener('dblclick',e=>{
     const rect=canvas.getBoundingClientRect();
-    mouse.x=((e.clientX-rect.left)/rect.width)*2-1;
-    mouse.y=-((e.clientY-rect.top)/rect.height)*2+1;
+    const mouse=new THREE.Vector2(((e.clientX-rect.left)/rect.width)*2-1,-((e.clientY-rect.top)/rect.height)*2+1);
     raycaster.setFromCamera(mouse,camera);
-    const intersects=raycaster.intersectObjects(nodeObjects.filter(o=>o.visible));
-    if(intersects.length>0){
-      const id=intersects[0].object.userData.id;
-      if(hiddenNodes.has(id))hiddenNodes.delete(id);else hiddenNodes.add(id);
-      updateVisibility();
-    }
+    const hits=raycaster.intersectObjects(nodeObjects.filter(o=>!hiddenNodes.has(o.userData.id)));
+    if(hits.length>0){const id=hits[0].object.userData.id;hiddenNodes.has(id)?hiddenNodes.delete(id):hiddenNodes.add(id);updateVisibility()}
   });
+}
+
+function selectNode(id){
+  selectedNode=id;
+  const d=document.getElementById('nodeDetails');
+  d.innerHTML=`<h3><i class="fa-solid fa-crosshairs"></i> Inspección del nodo</h3><p>Haz clic en un nodo para ver sus conexiones. Doble clic para ocultar/mostrar.</p>`;
 }
 
 function showInspector(id){
   const n=getNode(id),conns=getNodeConnections(id);
-  const inspector=document.getElementById('nodeInspector');
   document.getElementById('mNodeTitle').textContent=n.id;
   document.getElementById('mNodeSubtitle').textContent=n.type.replace(/_/g,' ');
   document.getElementById('mDegreeVal').textContent=conns.length;
   document.getElementById('mTypeVal').textContent=n.type.split('_')[0];
-  
-  const roleDescriptions={
-    "Estructura_Ecologica":"Nodo de conectividad hídrica y corredor biológico. Sostiene la capacidad de restauración ecológica del territorio.",
-    "Servicios_Publicos":"Infraestructura de saneamiento básico y gestión hídrica. Condiciona la capacidad de carga urbana.",
-    "Gestion_Riesgo":"Zona con restricción por amenaza natural. Limita el desarrollo urbano y requiere manejo especial.",
-    "Movilidad_Transporte":"Eje estructurante de movilidad. Articula la conectividad territorial y el acceso a oportunidades.",
-    "Actividades_Economicas":"Nodo de actividad productiva y empleo. Genera dinámicas económicas territoriales.",
-    "Sistema_Cuidado":"Equipamiento de cuidado y salud. Cubre necesidades de la población vulnerable.",
-    "Espacio_Publico":"Espacio de encuentro y recreación. Calidad de vida y cohesión social.",
-    "Equipamiento_Cultural":"Infraestructura cultural y educativa. Fortalece el tejido social y la identidad.",
-    "Seguridad":"Nodo de seguridad y convivencia. Presencia institucional y control territorial.",
-    "Clasificacion_Suelo":"Determinación de uso del suelo. Condiciona las transformaciones urbanas posibles.",
-    "Habitabilidad_Informalidad":"Tejido urbano de origen informal. Requiere mejoramiento integral y regularización.",
-    "Gobernanza_Instrumentos":"Instrumento de planeación y gestión territorial. Regula las decisiones de actores públicos y privados."
-  };
-  document.getElementById('mRoleBox').textContent=roleDescriptions[n.type]||"Rol territorial estratégico para el desarrollo del sector.";
-  
-  const locDescriptions={
-    "Estructura_Ecologica":"Humedales El Burro, La Vaca, Techo y ronda del Río Bogotá. Borde sur-occidente de Kennedy.",
-    "Servicios_Publicos":"Canales Cundinamarca y Américas, PTAR Canoas y zona de influencia del sistema de saneamiento.",
-    "Gestion_Riesgo":"Zonas de reasentamiento, suelos de protección y puntos críticos de inundación IDIGER.",
-    "Movilidad_Transporte":"Corredores de Metro, TransMilenio, ALO, Avenida Boyacá y red ciclorrutas.",
-    "Actividades_Economicas":"Corabastos, zona franca Fontibón, nodos logísticos y plazas de mercado.",
-    "Sistema_Cuidado":"Manzanas del cuidado, hospitales y colegios de Kennedy y Bosa.",
-    "Espacio_Publico":"Parque Metropolitano Timiza, Alameda El Porvenir y sistema de espacios públicos.",
-    "Equipamiento_Cultural":"Biblioteca Pública El Tintal Manuel Zapata Olivella.",
-    "Seguridad":"CAI y estaciones de policía del sector Corabastos.",
-    "Clasificacion_Suelo":"Tratamientos de desarrollo, mejoramiento integral y áreas industriales.",
-    "Habitabilidad_Informalidad":"Tejidos urbanos consolidados de origen informal de Patio Bonito y El Amparo.",
-    "Gobernanza_Instrumentos":"Instancias de planeación distrital, veeduría ciudadana y macroproyectos de interés social."
-  };
-  document.getElementById('mLocBox').textContent=locDescriptions[n.type]||"Sector Kennedy, locality de Kennedy, Bogotá D.C.";
-  
-  const alertDescriptions={
-    "Estructura_Ecologica":"Sensible a pérdida de conectividad hídrica, contaminación y presión urbanística sobre los humedales.",
-    "Servicios_Publicos":"Vulnerable a la saturación de la infraestructura de saneamiento y la capacidad de las PTAR.",
-    "Gestion_Riesgo":"Zona con restricción por amenaza natural. No mitigable en algunos sectores.",
-    "Movilidad_Transporte":"Presión por congestión vehicular y demanda de transporte público insuficiente.",
-    "Actividades_Economicas":"Presión por conflictos de uso del suelo, informalidad comercial y logística.",
-    "Sistema_Cuidado":"Déficits en cobertura de equipamientos de salud y cuidado para la población vulnerable.",
-    "Espacio_Publico":"Carencia de espacio público verde per cápita. Presión por privatización del espacio.",
-    "Equipamiento_Cultural":"Cobertura insuficiente de equipamientos culturales en el sector.",
-    "Seguridad":"Presión por inseguridad ciudadana y presencia de economías ilegales.",
-    "Clasificacion_Suelo":"Conflictos por cambios de uso del suelo y presión urbanística sobre suelos de protección.",
-    "Habitabilidad_Informalidad":"Vulnerabilidad por déficit de servicios públicos, riesgo y falta de regularización.",
-    "Gobernanza_Instrumentos":"Tensiones entre intereses públicos y privados en la toma de decisiones territoriales."
-  };
-  document.getElementById('mAlertBox').textContent=alertDescriptions[n.type]||"Presión territorial por transformación urbana acelerada.";
-  
-  const neighborList=document.getElementById('mNeighborList');
-  neighborList.innerHTML='';
-  conns.forEach(c=>{
-    const otherId=c.from===id?c.to:c.from;
-    const other=getNode(otherId);
-    const row=document.createElement('div');
-    row.className='neighbor-row';
-    row.innerHTML=`<span>${otherId} · ${other.type.split('_')[0]}</span><span style="color:${typeColors[other.type]}">${c.type}</span>`;
-    row.onclick=()=>{selectNode(otherId)};
-    neighborList.appendChild(row);
+  const roles={"Estructura_Ecologica":"Nodo de conectividad hídrica y corredor biológico.","Servicios_Publicos":"Infraestructura de saneamiento y gestión hídrica.","Gestion_Riesgo":"Zona con restricción por amenaza natural.","Movilidad_Transporte":"Eje estructurante de movilidad.","Actividades_Economicas":"Nodo de actividad productiva.","Sistema_Cuidado":"Equipamiento de cuidado y salud.","Espacio_Publico":"Espacio de encuentro y recreación.","Equipamiento_Cultural":"Infraestructura cultural.","Seguridad":"Nodo de seguridad.","Clasificacion_Suelo":"Determinación de uso del suelo.","Habitabilidad_Informalidad":"Tejido urbano informal.","Gobernanza_Instrumentos":"Instrumento de planeación."};
+  document.getElementById('mRoleBox').textContent=roles[n.type]||"Rol territorial.";
+  document.getElementById('mLocBox').textContent="Sector Kennedy, Bogotá D.C.";
+  document.getElementById('mAlertBox').textContent="Presión por transformación urbana.";
+  const nl=document.getElementById('mNeighborList');nl.innerHTML='';
+  conns.forEach(c=>{const oid=c.from===id?c.to:c.from;const row=document.createElement('div');row.className='neighbor-row';row.innerHTML=`<span>${oid}</span><span style="color:${typeColors[n.type]}">${getNode(oid).type.split('_')[0]}</span>`;row.onclick=()=>{selectNode(oid);showInspector(oid)};nl.appendChild(row)});
+  document.getElementById('nodeInspector').classList.add('visible');
+}
+
+function closeInspector(){document.getElementById('nodeInspector').classList.remove('visible')}
+function focusSelectedNode(){camera.position.set(0,0,800)}
+function hideCurrentNode(){if(selectedNode){hiddenNodes.add(selectedNode);updateVisibility();closeInspector()}}
+
+function updateVisibility(){
+  nodeObjects.forEach(o=>{o.visible=!hiddenNodes.has(o.userData.id)});
+}
+
+function toggleCat(catIdx){
+  const isActive=!document.getElementById('catCard'+catIdx).classList.contains('inactive');
+  typeOrder.forEach((type,ci)=>{if(catMapping[ci]===catIdx){const id=nodes[ci].id;if(isActive)hiddenNodes.add(id);else hiddenNodes.delete(id)}});
+  document.getElementById('catCard'+catIdx).classList.toggle('inactive',isActive);
+  document.getElementById('toggleCat'+classList).classList.toggle('checked',!isActive);
+  updateVisibility();
+}
+
+function toggleAllCats(show){
+  hiddenNodes.clear();
+  for(let i=0;i<typeOrder.length;i++){
+    if(!show)hiddenNodes.add(nodes[i].id);
+    document.getElementById('catCard'+i).classList.toggle('inactive',!show);
+    document.getElementById('toggleCat'+i).classList.toggle('checked',show);
+  }
+  updateVisibility();
+}
+
+function restoreAll(){hiddenNodes.clear();selectedNode=null;closeInspector();toggleAllCats(true);resetCamera()}
+
+function resetCamera(){camera.position.set(0,0,800)}
+function setLayout(type){document.getElementById('btnLayoutHyp').classList.toggle('active',type==='hyperbolic');document.getElementById('btnLayoutClust').classList.toggle('active',type==='clustered')}
+
+function searchNode(val){
+  const s=val.toLowerCase();
+  hiddenNodes.clear();
+  if(!s){updateVisibility();return}
+  nodes.forEach(n=>{
+    const match=n.label.toLowerCase().includes(s)||n.id.toLowerCase().includes(s);
+    if(!match)hiddenNodes.add(n.id);
   });
+  updateVisibility();
+}
+
+function toggleSideDrawer(){document.getElementById('sideDrawer').classList.toggle('collapsed')}
+function toggleWelcome(){document.getElementById('welcomeModal').classList.toggle('hidden')}
+function closeWelcome(){document.getElementById('welcomeModal').classList.add('hidden')}
+
+function buildDonuts(){
+  // Donut A: Interaction types
+  const donutA=document.getElementById('donutA');
+  const types=[...new Set(nodes.map(n=>n.type))];
+  const counts=types.map(t=>nodes.filter(n=>n.type===t).length);
+  const total=counts.reduce((a,b)=>a+b,0);
+  let cum=0,svg='';
+  types.forEach((t,i)=>{
+    const pct=counts[i]/total*100;
+    const angle1=cum*3.6,angle2=(cum+pct/100)*100*3.6;
+    const large=pct>50?1:0;
+    const x1=100+80*Math.cos((angle1-90)*Math.PI/180),y1=100+80*Math.sin((angle1-90)*Math.PI/180);
+    const x2=100+80*Math.cos((angle2-90)*Math.PI/180),y2=100+80*Math.sin((angle2-90)*Math.PI/180);
+    svg+=`<path d="M100,100 L${x1},${y1} A80,80 0 ${large},1 ${x2},${y2} Z" fill="${typeColors[t]}" stroke="none" opacity="0.85"><title>${t}: ${counts[i]}</title></path>`;
+    cum+=pct;
+  });
+  svg+=`<circle cx="100" cy="100" r="50" fill="#0a0a0c"/><text x="100" y="95" text-anchor="middle" fill="#f1f5f9" font-size="18" font-weight="900">${total}</text><text x="100" y="112" text-anchor="middle" fill="#94a3b8" font-size="8" text-transform="uppercase">nodos</text>`;
+  donutA.innerHTML=svg;
   
-  inspector.classList.add('visible');
+  // Legend A
+  const legendA=document.getElementById('legendA');
+  legendA.innerHTML=types.map((t,i)=>`<div class="legend-row"><div class="legend-label"><div class="legend-dot" style="background:${typeColors[t]}"></div>${t.replace(/_/g,' ')}</div><span class="legend-val">${counts[i]}</span></div>`).join('');
+  
+  // Donut B: Categories
+  const donutB=document.getElementById('donutB');
+  const cats=[...new Set(typeOrder.map((t,i)=>catMapping[i]))];
+  const catCounts=cats.map(c=>catMapping.filter(m=>m===c).length);
+  const catNames=['Estructura Ecológica','Servicios Públicos','Gestión Riesgo','Movilidad','Económicas','Cuidado','Espacio/Cultural','Suelo/Gobernanza','Seguridad/Informalidad'];
+  cum=0;svg='';
+  cats.forEach((c,i)=>{
+    const pct=catCounts[i]/total*100;
+    const angle1=cum*3.6,angle2=(cum+pct/100)*100*3.6;
+    const large=pct>50?1:0;
+    const x1=100+80*Math.cos((angle1-90)*Math.PI/180),y1=100+80*Math.sin((angle1-90)*Math.PI/180);
+    const x2=100+80*Math.cos((angle2-90)*Math.PI/180),y2=100+80*Math.sin((angle2-90)*Math.PI/180);
+    const colors=['#84A48B','#38BDF8','#F59E0B','#E89A6C','#F5C945','#8FD7C8','#A276F2','#8E877F','#D9824E'];
+    svg+=`<path d="M100,100 L${x1},${y1} A80,80 0 ${large},1 ${x2},${y2} Z" fill="${colors[i]}" stroke="none" opacity="0.85"><title>${catNames[i]}: ${catCounts[i]}</title></path>`;
+    cum+=pct;
+  });
+  svg+=`<circle cx="100" cy="100" r="50" fill="#0a0a0c"/><text x="100" y="95" text-anchor="middle" fill="#f1f5f9" font-size="18" font-weight="900">${total}</text><text x="100" y="112" text-anchor="middle" fill="#94a3b8" font-size="8" text-transform="uppercase">capas</text>`;
+  donutB.innerHTML=svg;
+  
+  // Legend B
+  const legendB=document.getElementById('legendB');
+  legendB.innerHTML=cats.map((c,i)=>`<div class="legend-row"><div class="legend-label"><div class="legend-dot" style="background:${['#84A48B','#38BDF8','#F59E0B','#E89A6C','#F5C945','#8FD7C8','#A276F2','#8E877F','#D9824E'][i]}"></div>${catNames[i]}</div><span class="legend-val">${catCounts[i]}</span></div>`).join('');
 }
-
-function closeInspector(){
-  document.getElementById('nodeInspector').classList.remove('visible');
-}
-
-function focusSelectedNode(){
-  // Reset camera to center
-  camera.position.set(0,0,800);
-  zoomReset();
-}
-
-function hideCurrentNode(){
-  if(selectedNode){
-    hiddenNodes.add(selectedNode);
-    updateVisibility();
-    closeInspector();
-  }
-}
-
-function selectNode(id){
-  selectedNode=selectedNode===id?null:id;
-  const d=document.getElementById('nodeDetails');
-  if(!selectedNode){
-    d.innerHTML='<h3><i class="fa-solid fa-crosshairs"></i> Inspección del nodo</h3><p>Haz clic en un nodo para ver sus conexiones. Doble clic para ocultar/mostrar.</p>';
-    return;
-  }
-  const n=getNode(selectedNode),conns=getNodeConnections(selectedNode);
-  let h=`<h3><i class="fa-solid fa-crosshairs"></i> Inspección del nodo</h3>`;
-  h+=`<h4>${n.id}</h4><p style="font-size:10px;color:var(--muted);margin-bottom:8px">${n.label}</p>`;
-  h+=`<span class="node-type" style="background:${typeColors[n.type]}22;color:${typeColors[n.type]}">${n.type.replace(/_/g,' ')}</span>`;
-  h+=`<div style="font-size:10px;margin-top:8px"><strong>Conexiones:</strong> ${conns.length}</div>`;
-  if(isHub(n.id))h+=`<div style="font-size:10px;color:var(--yellow);margin-top:4px"><i class="fa-solid fa-star"></i> Hub de red</div>`;
-  if(conns.length>0){
-    h+='<ul class="connections-list">';
-    conns.forEach(c=>{
-      const o=c.from===selectedNode?c.to:c.from;
-      h+=`<li><i class="fa-solid fa-arrow-right" style="color:${typeColors[n.type]}"></i> ${o}</li>`;
-    });
-    h+='</ul>';
-  }
-  d.innerHTML=h;
-}
-
-function zoomIn(){zoom=Math.min(zoom*1.2,3);camera.position.multiplyScalar(1/zoom);zoom=1}
-function zoomOut(){zoom=Math.max(zoom/1.2,0.3);camera.position.multiplyScalar(1/zoom);zoom=1}
-function zoomReset(){camera.position.set(0,0,800)}
-function resetView(){zoomReset();hiddenNodes.clear();selectedNode=null;document.getElementById('searchInput').value='';document.getElementById('typeFilter').value='all';document.getElementById('minConn').value=0;updateVisibility()}
 
 function animate(){
   requestAnimationFrame(animate);
+  if(autoRotate){nodes.forEach((n,i)={const o=nodeObjects[i];if(o&&!hiddenNodes.has(n.id)){const t=Date.now()*0.0003+i;o.position.x+=Math.sin(t)*0.15;o.position.y+=Math.cos(t*0.7)*0.1}})}
   renderer.render(scene,camera);
 }
 
 window.addEventListener('resize',()=>{
-  const wrap=document.getElementById('threeCanvas').parentElement;
+  const wrap=document.getElementById('canvasContainer');
   camera.aspect=wrap.clientWidth/wrap.clientHeight;
   camera.updateProjectionMatrix();
   renderer.setSize(wrap.clientWidth,wrap.clientHeight);
 });
+
+// Close welcome on start
+setTimeout(()=>{document.getElementById('welcomeModal').classList.add('hidden')},3000);
 
 init();
 </script>
