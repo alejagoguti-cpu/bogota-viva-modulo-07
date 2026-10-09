@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Red Socioecológica Kennedy · Interacciones Bióticas</title>
+<title>Red Kennedy · 3D</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <style>
@@ -24,30 +24,41 @@ body{background:var(--bg);color:var(--text);font-family:Inter,system-ui,sans-ser
 .icon-btn{width:32px;height:32px;border:1px solid var(--border);border-radius:8px;background:transparent;color:var(--muted);cursor:pointer;display:grid;place-items:center;transition:all 0.18s}
 .icon-btn:hover{color:var(--teal);border-color:var(--teal)}
 .content{flex:1;display:grid;grid-template-columns:1fr 340px;overflow:hidden}
-.canvas-wrap{position:relative;overflow:hidden;background:radial-gradient(circle at 50% 45%,rgba(30,81,75,0.15),transparent 60%),#0b0c0f}
-.canvas-wrap canvas{width:100%;height:100%;display:block;cursor:grab}
-.canvas-wrap canvas:active{cursor:grabbing}
+.canvas-wrap{position:relative;overflow:hidden;background:radial-gradient(circle at 50% 45%,rgba(30,81,75,0.12),transparent 60%),#0b0c 0f}
+#threeCanvas{width:100%;height:100%;display:block;cursor:grab}
+#threeCanvas:active{cursor:grabbing}
 .sidebar-right{border-left:1px solid var(--border);background:var(--panel);overflow-y:auto;padding:16px}
 .panel{background:#1a1b1e;border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:12px}
 .panel h3{font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--teal);margin-bottom:10px;display:flex;align-items:center;gap:6px}
 .panel p{font-size:11px;color:var(--muted);line-height:1.5}
-.filter-group{margin-bottom:12px}
-.filter-group label{display:block;font-size:9px;text-transform:uppercase;letter-spacing:0.5px;color:var(--muted);margin-bottom:6px}
-.filter-group select{width:100%;padding:6px 8px;background:#111817;border:1px solid var(--border);border-radius:6px;color:var(--text);font-size:11px}
-.filter-group input[type="range"]{width:100%;accent-color:var(--teal)}
+.legend-item{display:flex;align-items:flex-start;gap:8px;margin-bottom:8px;font-size:10px;color:var(--muted)}
+.legend-item:last-child{margin-bottom:0}
+.legend-swatch{width:28px;height:4px;border-radius:2px;flex-shrink:0;margin-top:4px}
+.legend-swatch.solid{background:var(--blue)}
+.legend-swatch.dashed{background:repeating-linear-gradient(90deg,var(--orange) 0,var(--orange) 4px,transparent 4px,transparent 8px)}
+.legend-swatch.dotted{background:repeating-linear-gradient(90deg,var(--red) 0,var(--red) 2px,transparent 2px,transparent 6px)}
+.legend-swatch.green{background:var(--green)}
+.legend-dot{width:14px;height:14px;border-radius:50%;background:var(--purple);flex-shrink:0;margin-top:2px}
 .stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 .stat-card{background:#111817;border:1px solid var(--border);border-radius:8px;padding:10px;text-align:center}
 .stat-card b{display:block;font-size:20px;color:var(--teal);font-family:'Space Grotesk',sans-serif}
 .stat-card span{font-size:8px;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px}
+.search-box{width:100%;padding:8px 10px;background:#111817;border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:11px;margin-bottom:12px}
+.search-box:focus{outline:none;border-color:var(--teal)}
+.filter-group{margin-bottom:12px}
+.filter-group label{display:block;font-size:9px;text-transform:uppercase;letter-spacing:0.5px;color:var(--muted);margin-bottom:6px}
+.filter-group select{width:100%;padding:6px 8px;background:#111817;border:1px solid var(--border);border-radius:6px;color:var(--text);font-size:11px}
+.filter-group input[type="range"]{width:100%;accent-color:var(--teal)}
+.toggle-panel{display:grid;grid-template-columns:1fr 1fr;gap:4px;margin-top:8px;max-height:180px;overflow-y:auto}
+.toggle-btn{padding:4px 6px;border:1px solid var(--border);border-radius:6px;background:#111817;color:var(--muted);font-size:8px;cursor:pointer;transition:all 0.18s;display:flex;align-items:center;gap:3px;justify-content:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.toggle-btn:hover{border-color:var(--teal);color:var(--teal)}
+.toggle-btn.active{background:rgba(70,214,208,0.15);border-color:var(--teal);color:var(--teal)}
 .node-details h4{font-size:13px;color:var(--text);margin-bottom:6px}
 .node-details .node-type{display:inline-block;padding:2px 8px;border-radius:4px;font-size:9px;font-weight:600;margin-bottom:8px}
 .connections-list{margin-top:8px;padding-left:0;list-style:none}
 .connections-list li{font-size:10px;padding:4px 0;border-bottom:1px solid rgba(255,255,255,0.05);color:var(--muted)}
 .connections-list li:last-child{border-bottom:none}
 .connections-list li i{margin-right:6px;font-size:8px}
-.legend{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
-.legend-item{display:flex;align-items:center;gap:4px;font-size:9px;color:var(--muted)}
-.legend-swatch{width:10px;height:10px;border-radius:50%}
 .zoom-controls{position:absolute;bottom:16px;right:16px;display:flex;gap:6px;z-index:10}
 .zoom-controls button{width:36px;height:36px;border:1px solid var(--border);border-radius:8px;background:rgba(11,12,15,0.9);color:var(--teal);font-size:14px;cursor:pointer;transition:all 0.18s}
 .zoom-controls button:hover{background:rgba(70,214,208,0.15);border-color:var(--teal)}
@@ -55,17 +66,6 @@ body{background:var(--bg);color:var(--text);font-family:Inter,system-ui,sans-ser
 .tooltip.visible{display:block}
 .tooltip strong{display:block;color:var(--teal);font-size:12px;margin-bottom:4px}
 .tooltip span{font-size:10px;color:var(--muted);line-height:1.4}
-.toggle-panel{display:grid;grid-template-columns:1fr 1fr;gap:4px;margin-top:8px;max-height:180px;overflow-y:auto}
-.toggle-btn{padding:4px 6px;border:1px solid var(--border);border-radius:6px;background:#111817;color:var(--muted);font-size:8px;cursor:pointer;transition:all 0.18s;display:flex;align-items:center;gap:3px;justify-content:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.toggle-btn:hover{border-color:var(--teal);color:var(--teal)}
-.toggle-btn.active{background:rgba(70,214,208,0.15);border-color:var(--teal);color:var(--teal)}
-.metrics-panel{position:absolute;top:16px;left:16px;background:rgba(20,21,24,0.95);border:1px solid var(--border);border-radius:12px;padding:16px;z-index:50;max-width:300px;display:none}
-.metrics-panel.visible{display:block}
-.metrics-panel h3{font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--teal);margin-bottom:10px}
-.metrics-panel .metric-row{display:flex;justify-content:space-between;font-size:10px;padding:4px 0;border-bottom:1px solid rgba(255,255,255,0.05)}
-.metrics-panel .metric-row:last-child{border-bottom:none}
-.interaction-types{display:flex;flex-wrap:wrap;gap:4px;margin-top:8px}
-.interaction-badge{padding:3px 6px;border-radius:4px;font-size:8px;font-weight:600}
 </style>
 </head>
 <body>
@@ -75,46 +75,44 @@ body{background:var(--bg);color:var(--text);font-family:Inter,system-ui,sans-ser
     <nav class="icon-nav">
       <a href="index.html" class="icon-nav-item" title="Inicio"><i class="fa-solid fa-house"></i></a>
       <a href="kennedy.html" class="icon-nav-item" title="Kennedy"><i class="fa-solid fa-map"></i></a>
-      <a href="red-kennedy.html" class="icon-nav-item active" title="Red Kennedy"><i class="fa-solid fa-circle-nodes"></i></a>
+      <a href="red-kennedy.html" class="icon-nav-item active" title="Red 3D"><i class="fa-solid fa-cube"></i></a>
     </nav>
   </aside>
   <main class="main">
     <header class="topbar">
-      <div class="topbar-brand"><i class="fa-solid fa-circle-nodes"></i> Red Socioecológica Kennedy</div>
+      <div class="topbar-brand"><i class="fa-solid fa-cube"></i> Red Kennedy · 3D</div>
       <div class="topbar-actions">
-        <button class="icon-btn" title="Métricas" onclick="toggleMetrics()"><i class="fa-solid fa-chart-pie"></i></button>
         <button class="icon-btn" title="Restablecer" onclick="resetView()"><i class="fa-solid fa-compress"></i></button>
-        <button class="icon-btn" title="Exportar" onclick="exportPNG()"><i class="fa-solid fa-download"></i></button>
+        <button class="icon-btn" title="Exportar" onclick="window.print()"><i class="fa-solid fa-download"></i></button>
       </div>
     </header>
     <div class="content">
       <div class="canvas-wrap">
-        <canvas id="networkCanvas"></canvas>
+        <canvas id="threeCanvas"></canvas>
         <div class="zoom-controls">
           <button onclick="zoomIn()"><i class="fa-solid fa-plus"></i></button>
           <button onclick="zoomReset()">100%</button>
           <button onclick="zoomOut()"><i class="fa-solid fa-minus"></i></button>
         </div>
-        <div class="metrics-panel" id="metricsPanel">
-          <h3><i class="fa-solid fa-chart-pie"></i> Métricas del Sistema</h3>
-          <div class="metric-row"><span>Taxones visibles</span><b id="mTaxones">0</b></div>
-          <div class="metric-row"><span>Interacciones</span><b id="mInteracciones">0</b></div>
-          <div class="metric-row"><span>Hubs identificados</span><b id="mHubs">0</b></div>
-          <div class="metric-row"><span>Densidad de red</span><b id="mDensidad">0%</b></div>
-          <div class="metric-row"><span>Grado promedio</span><b id="mGrado">0</b></div>
-          <div class="metric-row"><span>Componentes</span><b id="mComponentes">0</b></div>
-        </div>
       </div>
       <aside class="sidebar-right">
         <div class="panel">
+          <h3><i class="fa-solid fa-legend"></i> Leyenda</h3>
+          <div class="legend-item"><div class="legend-swatch solid"></div><div><b>Transformación prevista</b><br>Intervenciones y cambios orientados por el POT</div></div>
+          <div class="legend-item"><div class="legend-swatch dashed"></div><div><b>Impacto o relación hipotética</b><br>Relaciones entre usos, movilidad y ambiente</div></div>
+          <div class="legend-item"><div class="legend-swatch dotted"></div><div><b>Restricción o condicionante</b><br>Restricciones, protección y obligaciones territoriales</div></div>
+          <div class="legend-item"><div class="legend-swatch green"></div><div><b>Conectividad ecológica</b><br>Humedales, corredores y restauración</div></div>
+          <div class="legend-item"><div class="legend-dot"></div><div><b>Actor o nodo de decisión</b><br>Instituciones, comunidades y agentes</div></div>
+        </div>
+        <div class="panel">
           <h3><i class="fa-solid fa-filter"></i> Filtros</h3>
-          <input type="search" class="search-box" placeholder="Buscar nodo..." id="searchInput" oninput="filterNodes()" style="width:100%;padding:8px 10px;background:#111817;border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:11px;margin-bottom:12px">
+          <input type="search" class="search-box" placeholder="Buscar nodo..." id="searchInput" oninput="filterNodes()">
           <div class="filter-group">
-            <label>Capa Taxonómica</label>
+            <label>Capa</label>
             <select id="typeFilter" onchange="filterNodes()"><option value="all">Todas</option></select>
           </div>
           <div class="filter-group">
-            <label>Interacciones mínimas: <span id="minConnLabel">0</span></label>
+            <label>Conexiones mínimas: <span id="minConnLabel">0</span></label>
             <input type="range" id="minConn" min="0" max="10" value="0" oninput="filterNodes()">
           </div>
         </div>
@@ -124,172 +122,197 @@ body{background:var(--bg);color:var(--text);font-family:Inter,system-ui,sans-ser
         </div>
         <div class="panel" id="nodeDetails">
           <h3><i class="fa-solid fa-crosshairs"></i> Inspección del nodo</h3>
-          <p>Haz clic en un nodo para ver sus conexiones y detalles.</p>
-        </div>
-        <div class="panel">
-          <h3><i class="fa-solid fa-legend"></i> Leyenda</h3>
-          <div class="legend" id="legendPanel"></div>
+          <p>Haz clic en un nodo para ver sus conexiones. Doble clic para ocultar/mostrar.</p>
         </div>
       </aside>
     </div>
   </main>
 </div>
 <div class="tooltip" id="tooltip"></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script>
 const nodes=[
-{id:"G1_N10",label:"Humedal La Vaca",type:"Estructura_Ecologica",icon:"fa-water",interaction:"Dispersión"},
-{id:"G1_N11",label:"Humedal El Burro",type:"Estructura_Ecologica",icon:"fa-water",interaction:"Dispersión"},
-{id:"G1_N14",label:"Humedal Techo",type:"Estructura_Ecologica",icon:"fa-water",interaction:"Dispersión"},
-{id:"G1_N21",label:"Rio Fucha",type:"Estructura_Ecologica",icon:"fa-water",interaction:"Dispersión"},
-{id:"G1_N28",label:"Quebrada Limas",type:"Estructura_Ecologica",icon:"fa-water",interaction:"Dispersión"},
-{id:"G1_N01",label:"Rio Bogota",type:"Estructura_Ecologica",icon:"fa-water",interaction:"Dispersión"},
-{id:"G1_N36",label:"Corredor Ecologico de Ronda Rio Bogota",type:"Estructura_Ecologica",icon:"fa-tree",interaction:"Dispersión"},
-{id:"G1_N38",label:"Area de Manejo Especial del Rio Bogota",type:"Estructura_Ecologica",icon:"fa-shield-halved",interaction:"Dispersión"},
-{id:"G8_N30",label:"Canal Cundinamarca",type:"Servicios_Publicos",icon:"fa-faucet-drip",interaction:"Herbivoría"},
-{id:"G8_N31",label:"Canal Americas",type:"Servicios_Publicos",icon:"fa-faucet-drip",interaction:"Herbivoría"},
-{id:"G2_N06",label:"Zonas de Reasentamiento Prioritario",type:"Gestion_Riesgo",icon:"fa-triangle-exclamation",interaction:"Competencia"},
-{id:"G2_N07",label:"Suelos de Proteccion por Riesgo no Mitigable",type:"Gestion_Riesgo",icon:"fa-triangle-exclamation",interaction:"Competencia"},
-{id:"G2_N20",label:"Puntos Criticos de Inundacion (IDIGER)",type:"Gestion_Riesgo",icon:"fa-water",interaction:"Competencia"},
-{id:"G4_N01",label:"Primera Linea del Metro de Bogota PLMB",type:"Movilidad_Transporte",icon:"fa-train",interaction:"Nidificación"},
-{id:"G4_N10",label:"Corredor Verde Av Ciudad de Cali",type:"Movilidad_Transporte",icon:"fa-road",interaction:"Nidificación"},
-{id:"G4_N18",label:"Avenida Longitudinal de Occidente ALO Sur",type:"Movilidad_Transporte",icon:"fa-road",interaction:"Nidificación"},
-{id:"G4_N21",label:"Patio Taller Metro Bosa",type:"Movilidad_Transporte",icon:"fa-warehouse",interaction:"Nidificación"},
-{id:"G4_N17",label:"Red Ciclorrutas Prioritarias",type:"Movilidad_Transporte",icon:"fa-bicycle",interaction:"Nidificación"},
-{id:"G4_N25",label:"Portal Americas TransMilenio",type:"Movilidad_Transporte",icon:"fa-bus",interaction:"Nidificación"},
-{id:"G4_N26",label:"Avenida Boyaca",type:"Movilidad_Transporte",icon:"fa-road",interaction:"Nidificación"},
-{id:"G5_N05",label:"Nodo Logistico Calle 13",type:"Actividades_Economicas",icon:"fa-truck",interaction:"Depredación"},
-{id:"G5_N10",label:"Centro de Abasto Corabastos",type:"Actividades_Economicas",icon:"fa-store",interaction:"Depredación"},
-{id:"G5_N14",label:"Plaza de Mercado Fontibon",type:"Actividades_Economicas",icon:"fa-store",interaction:"Depredación"},
-{id:"G5_N02",label:"Zona Franca Fontibon",type:"Actividades_Economicas",icon:"fa-industry",interaction:"Depredación"},
-{id:"G8_N22",label:"Data Center Fontibon",type:"Servicios_Publicos",icon:"fa-server",interaction:"Herbivoría"},
-{id:"G8_N17",label:"Planta de Tratamiento de Aguas Residuales (PTAR Canoas)",type:"Servicios_Publicos",icon:"fa-recycle",interaction:"Herbivoría"},
-{id:"G6_N05",label:"Manzana del Cuidado Kennedy",type:"Sistema_Cuidado",icon:"fa-hands-holding-child",interaction:"Mutualismo"},
-{id:"G6_N20",label:"Hospital de Kennedy",type:"Sistema_Cuidado",icon:"fa-hospital",interaction:"Mutualismo"},
-{id:"G6_N01",label:"Manzana del Cuidado Bosa",type:"Sistema_Cuidado",icon:"fa-hands-holding-child",interaction:"Mutualismo"},
-{id:"G6_N11",label:"Hospital de Bosa",type:"Sistema_Cuidado",icon:"fa-hospital",interaction:"Mutualismo"},
-{id:"G6_N17",label:"Colegio Sede Bosa Porvenir",type:"Sistema_Cuidado",icon:"fa-school",interaction:"Mutualismo"},
-{id:"G7_N03",label:"Parque Metropolitano Timiza",type:"Espacio_Publico",icon:"fa-tree",interaction:"Dispersión"},
-{id:"G7_N08",label:"Alameda El Porvenir",type:"Espacio_Publico",icon:"fa-tree",interaction:"Dispersión"},
-{id:"G11_N01",label:"Biblioteca Publica El Tintal Manuel Zapata Olivella",type:"Equipamiento_Cultural",icon:"fa-book-open",interaction:"Visita Floral"},
-{id:"G10_N01",label:"CAI y Estacion de Policia Corabastos",type:"Seguridad",icon:"fa-shield-halved",interaction:"Anidamiento"},
-{id:"G3_N12",label:"Tratamiento de Desarrollo Zona Occidente",type:"Clasificacion_Suelo",icon:"fa-map",interaction:"Competencia"},
-{id:"G3_N14",label:"Tratamiento de Mejoramiento Integral Estructural",type:"Clasificacion_Suelo",icon:"fa-map",interaction:"Competencia"},
-{id:"G3_N15",label:"Tratamiento de Mejoramiento Integral Habitabilidad",type:"Clasificacion_Suelo",icon:"fa-map",interaction:"Competencia"},
-{id:"G3_N18",label:"Areas de Actividad Industrial y Logistica",type:"Clasificacion_Suelo",icon:"fa-map",interaction:"Competencia"},
-{id:"G12_N01",label:"Tejido Urbano Consolidado de Origen Informal (Patio Bonito El Amparo)",type:"Habitabilidad_Informalidad",icon:"fa-house-chimney",interaction:"Parasitismo"},
-{id:"G9_N03",label:"Reparto Proporcional de Cargas y Beneficios",type:"Gobernanza_Instrumentos",icon:"fa-scale-balanced",interaction:"Competencia"},
-{id:"G9_N17",label:"Subsidio Distrital de Vivienda",type:"Gobernanza_Instrumentos",icon:"fa-hand-holding-dollar",interaction:"Competencia"},
-{id:"G9_N11",label:"Empresa de Renovacion y Desarrollo Urbano ERU",type:"Gobernanza_Instrumentos",icon:"fa-building",interaction:"Competencia"},
-{id:"G9_N19",label:"Macroproyectos de Interes Social MIS",type:"Gobernanza_Instrumentos",icon:"fa-handshake",interaction:"Competencia"},
-{id:"G9_N18",label:"Comision de Veeduria Ciudadana POT",type:"Gobernanza_Instrumentos",icon:"fa-users",interaction:"Competencia"}
+{id:"G1_N10",label:"Humedal La Vaca",type:"Estructura_Ecologica",icon:"fa-water"},
+{id:"G1_N11",label:"Humedal El Burro",type:"Estructura_Ecologica",icon:"fa-water"},
+{id:"G1_N14",label:"Humedal Techo",type:"Estructura_Ecologica",icon:"fa-water"},
+{id:"G1_N21",label:"Rio Fucha",type:"Estructura_Ecologica",icon:"fa-water"},
+{id:"G1_N28",label:"Quebrada Limas",type:"Estructura_Ecologica",icon:"fa-water"},
+{id:"G1_N01",label:"Rio Bogota",type:"Estructura_Ecologica",icon:"fa-water"},
+{id:"G1_N36",label:"Corredor Ecologico Ronda Rio Bogota",type:"Estructura_Ecologica",icon:"fa-tree"},
+{id:"G1_N38",label:"Area Manejo Especial Rio Bogota",type:"Estructura_Ecologica",icon:"fa-shield-halved"},
+{id:"G8_N30",label:"Canal Cundinamarca",type:"Servicios_Publicos",icon:"fa-faucet-drip"},
+{id:"G8_N31",label:"Canal Americas",type:"Servicios_Publicos",icon:"fa-faucet-drip"},
+{id:"G2_N06",label:"Zonas Reasentamiento Prioritario",type:"Gestion_Riesgo",icon:"fa-triangle-exclamation"},
+{id:"G2_N07",label:"Suelos Proteccion Riesgo no Mitigable",type:"Gestion_Riesgo",icon:"fa-triangle-exclamation"},
+{id:"G2_N20",label:"Puntos Criticos Inundacion",type:"Gestion_Riesgo",icon:"fa-water"},
+{id:"G4_N01",label:"Primera Linea Metro PLMB",type:"Movilidad_Transporte",icon:"fa-train"},
+{id:"G4_N10",label:"Corredor Verde Av Ciudad Cali",type:"Movilidad_Transporte",icon:"fa-road"},
+{id:"G4_N18",label:"Avenida Longitudinal Occidente ALO",type:"Movilidad_Transporte",icon:"fa-road"},
+{id:"G4_N21",label:"Patio Taller Metro Bosa",type:"Movilidad_Transporte",icon:"fa-warehouse"},
+{id:"G4_N17",label:"Red Ciclorrutas Prioritarias",type:"Movilidad_Transporte",icon:"fa-bicycle"},
+{id:"G4_N25",label:"Portal Americas TransMilenio",type:"Movilidad_Transporte",icon:"fa-bus"},
+{id:"G4_N26",label:"Avenida Boyaca",type:"Movilidad_Transporte",icon:"fa-road"},
+{id:"G5_N05",label:"Nodo Logistico Calle 13",type:"Actividades_Economicas",icon:"fa-truck"},
+{id:"G5_N10",label:"Centro Abasto Corabastos",type:"Actividades_Economicas",icon:"fa-store"},
+{id:"G5_N14",label:"Plaza Mercado Fontibon",type:"Actividades_Economicas",icon:"fa-store"},
+{id:"G5_N02",label:"Zona Franca Fontibon",type:"Actividades_Economicas",icon:"fa-industry"},
+{id:"G8_N22",label:"Data Center Fontibon",type:"Servicios_Publicos",icon:"fa-server"},
+{id:"G8_N17",label:"PTAR Canoas",type:"Servicios_Publicos",icon:"fa-recycle"},
+{id:"G6_N05",label:"Manzana Cuidado Kennedy",type:"Sistema_Cuidado",icon:"fa-hands-holding-child"},
+{id:"G6_N20",label:"Hospital Kennedy",type:"Sistema_Cuidado",icon:"fa-hospital"},
+{id:"G6_N01",label:"Manzana Cuidado Bosa",type:"Sistema_Cuidado",icon:"fa-hands-holding-child"},
+{id:"G6_N11",label:"Hospital Bosa",type:"Sistema_Cuidado",icon:"fa-hospital"},
+{id:"G6_N17",label:"Colegio Sede Bosa Porvenir",type:"Sistema_Cuidado",icon:"fa-school"},
+{id:"G7_N03",label:"Parque Metropolitano Timiza",type:"Espacio_Publico",icon:"fa-tree"},
+{id:"G7_N08",label:"Alameda El Porvenir",type:"Espacio_Publico",icon:"fa-tree"},
+{id:"G11_N01",label:"Biblioteca Publica El Tintal",type:"Equipamiento_Cultural",icon:"fa-book-open"},
+{id:"G10_N01",label:"CAI Estacion Policia Corabastos",type:"Seguridad",icon:"fa-shield-halved"},
+{id:"G3_N12",label:"Tratamiento Desarrollo Zona Occidente",type:"Clasificacion_Suelo",icon:"fa-map"},
+{id:"G3_N14",label:"Mejoramiento Integral Estructural",type:"Clasificacion_Suelo",icon:"fa-map"},
+{id:"G3_N15",label:"Mejoramiento Integral Habitabilidad",type:"Clasificacion_Suelo",icon:"fa-map"},
+{id:"G3_N18",label:"Areas Industrial y Logistica",type:"Clasificacion_Suelo",icon:"fa-map"},
+{id:"G12_N01",label:"Tejido Urbano Informal Patio Bonito",type:"Habitabilidad_Informalidad",icon:"fa-house-chimney"},
+{id:"G9_N03",label:"Reparto Cargas y Beneficios",type:"Gobernanza_Instrumentos",icon:"fa-scale-balanced"},
+{id:"G9_N17",label:"Subsidio Distrital Vivienda",type:"Gobernanza_Instrumentos",icon:"fa-hand-holding-dollar"},
+{id:"G9_N11",label:"Empresa Renovacion Urbano ERU",type:"Gobernanza_Instrumentos",icon:"fa-building"},
+{id:"G9_N19",label:"Macroproyectos Interes Social MIS",type:"Gobernanza_Instrumentos",icon:"fa-handshake"},
+{id:"G9_N18",label:"Comision Veeduria Ciudadana POT",type:"Gobernanza_Instrumentos",icon:"fa-users"}
 ];
 
 const edges=[
-{from:"G1_N01",to:"G1_N21"},{from:"G1_N01",to:"G1_N28"},{from:"G1_N01",to:"G1_N36"},{from:"G1_N10",to:"G1_N11"},{from:"G1_N10",to:"G1_N14"},{from:"G1_N11",to:"G1_N14"},{from:"G1_N21",to:"G1_N28"},{from:"G1_N36",to:"G1_N38"},{from:"G8_N30",to:"G8_N31"},{from:"G8_N17",to:"G8_N22"},{from:"G2_N06",to:"G2_N07"},{from:"G2_N06",to:"G2_N20"},{from:"G2_N07",to:"G2_N20"},{from:"G4_N01",to:"G4_N21"},{from:"G4_N01",to:"G4_N25"},{from:"G4_N10",to:"G4_N18"},{from:"G4_N10",to:"G4_N26"},{from:"G4_N17",to:"G4_N26"},{from:"G4_N18",to:"G4_N26"},{from:"G4_N25",to:"G4_N26"},{from:"G4_N21",to:"G4_N25"},{from:"G5_N05",to:"G5_N10"},{from:"G5_N05",to:"G5_N02"},{from:"G5_N10",to:"G5_N14"},{from:"G5_N10",to:"G10_N01"},{from:"G5_N14",to:"G5_N02"},{from:"G6_N05",to:"G6_N20"},{from:"G6_N01",to:"G6_N11"},{from:"G6_N01",to:"G6_N17"},{from:"G6_N05",to:"G6_N01"},{from:"G6_N20",to:"G6_N11"},{from:"G7_N03",to:"G7_N08"},{from:"G7_N03",to:"G1_N10"},{from:"G3_N12",to:"G3_N14"},{from:"G3_N12",to:"G3_N15"},{from:"G3_N14",to:"G3_N15"},{from:"G3_N18",to:"G5_N02"},{from:"G3_N18",to:"G5_N05"},{from:"G9_N03",to:"G9_N17"},{from:"G9_N03",to:"G9_N19"},{from:"G9_N11",to:"G9_N18"},{from:"G9_N17",to:"G9_N19"},{from:"G9_N11",to:"G9_N19"},{from:"G12_N01",to:"G6_N01"},{from:"G12_N01",to:"G2_N06"},{from:"G11_N01",to:"G7_N03"},{from:"G11_N01",to:"G6_N05"},{from:"G8_N22",to:"G5_N02"},{from:"G8_N17",to:"G1_N21"},{from:"G4_N25",to:"G5_N10"},{from:"G4_N26",to:"G3_N12"},{from:"G6_N20",to:"G10_N01"},{from:"G7_N08",to:"G4_N10"},{from:"G9_N18",to:"G3_N12"},{from:"G9_N17",to:"G6_N01"},{from:"G1_N38",to:"G2_N20"},{from:"G8_N30",to:"G1_N21"},{from:"G5_N14",to:"G10_N01"},{from:"G6_N17",to:"G6_N01"},{from:"G4_N17",to:"G7_N03"},{from:"G3_N15",to:"G12_N01"},{from:"G9_N03",to:"G3_N14"},{from:"G8_N31",to:"G4_N26"},{from:"G2_N07",to:"G12_N01"},{from:"G5_N05",to:"G4_N26"},{from:"G6_N11",to:"G10_N01"},{from:"G7_N08",to:"G6_N05"},{from:"G1_N36",to:"G7_N03"},{from:"G4_N18",to:"G3_N18"},{from:"G9_N11",to:"G3_N12"},{from:"G8_N22",to:"G4_N01"},{from:"G1_N14",to:"G7_N03"},{from:"G2_N20",to:"G8_N17"},{from:"G5_N02",to:"G8_N22"},{from:"G6_N20",to:"G9_N17"},{from:"G4_N21",to:"G5_N05"},{from:"G3_N15",to:"G6_N01"},{from:"G11_N01",to:"G4_N10"},{from:"G10_N01",to:"G4_N25"},{from:"G1_N28",to:"G8_N30"},{from:"G7_N08",to:"G12_N01"},{from:"G9_N19",to:"G5_N10"},{from:"G8_N17",to:"G2_N20"}
+{from:"G1_N01",to:"G1_N21",type:"green"},{from:"G1_N01",to:"G1_N28",type:"green"},{from:"G1_N01",to:"G1_N36",type:"green"},{from:"G1_N10",to:"G1_N11",type:"green"},{from:"G1_N10",to:"G1_N14",type:"green"},{from:"G1_N11",to:"G1_N14",type:"green"},{from:"G1_N21",to:"G1_N28",type:"green"},{from:"G1_N36",to:"G1_N38",type:"green"},{from:"G8_N30",to:"G8_N31",type:"solid"},{from:"G8_N17",to:"G8_N22",type:"solid"},{from:"G2_N06",to:"G2_N07",type:"dotted"},{from:"G2_N06",to:"G2_N20",type:"dotted"},{from:"G2_N07",to:"G2_N20",type:"dotted"},{from:"G4_N01",to:"G4_N21",type:"solid"},{from:"G4_N01",to:"G4_N25",type:"solid"},{from:"G4_N10",to:"G4_N18",type:"solid"},{from:"G4_N10",to:"G4_N26",type:"solid"},{from:"G4_N17",to:"G4_N26",type:"solid"},{from:"G4_N18",to:"G4_N26",type:"solid"},{from:"G4_N25",to:"G4_N26",type:"solid"},{from:"G4_N21",to:"G4_N25",type:"solid"},{from:"G5_N05",to:"G5_N10",type:"solid"},{from:"G5_N05",to:"G5_N02",type:"solid"},{from:"G5_N10",to:"G5_N14",type:"solid"},{from:"G5_N10",to:"G10_N01",type:"solid"},{from:"G5_N14",to:"G5_N02",type:"solid"},{from:"G6_N05",to:"G6_N20",type:"solid"},{from:"G6_N01",to:"G6_N11",type:"solid"},{from:"G6_N01",to:"G6_N17",type:"solid"},{from:"G6_N05",to:"G6_N01",type:"solid"},{from:"G6_N20",to:"G6_N11",type:"solid"},{from:"G7_N03",to:"G7_N08",type:"green"},{from:"G7_N03",to:"G1_N10",type:"green"},{from:"G3_N12",to:"G3_N14",type:"dashed"},{from:"G3_N12",to:"G3_N15",type:"dashed"},{from:"G3_N14",to:"G3_N15",type:"dashed"},{from:"G3_N18",to:"G5_N02",type:"dashed"},{from:"G3_N18",to:"G5_N05",type:"dashed"},{from:"G9_N03",to:"G9_N17",type:"dotted"},{from:"G9_N03",to:"G9_N19",type:"dotted"},{from:"G9_N11",to:"G9_N18",type:"dotted"},{from:"G9_N17",to:"G9_N19",type:"dotted"},{from:"G9_N11",to:"G9_N19",type:"dotted"},{from:"G12_N01",to:"G6_N01",type:"dashed"},{from:"G12_N01",to:"G2_N06",type:"dashed"},{from:"G11_N01",to:"G7_N03",type:"solid"},{from:"G11_N01",to:"G6_N05",type:"solid"},{from:"G8_N22",to:"G5_N02",type:"solid"},{from:"G8_N17",to:"G1_N21",type:"green"},{from:"G4_N25",to:"G5_N10",type:"solid"},{from:"G4_N26",to:"G3_N12",type:"dashed"},{from:"G6_N20",to:"G10_N01",type:"solid"},{from:"G7_N08",to:"G4_N10",type:"solid"},{from:"G9_N18",to:"G3_N12",type:"dotted"},{from:"G9_N17",to:"G6_N01",type:"solid"},{from:"G1_N38",to:"G2_N20",type:"dotted"},{from:"G8_N30",to:"G1_N21",type:"green"},{from:"G5_N14",to:"G10_N01",type:"solid"},{from:"G6_N17",to:"G6_N01",type:"solid"},{from:"G4_N17",to:"G7_N03",type:"solid"},{from:"G3_N15",to:"G12_N01",type:"dashed"},{from:"G9_N03",to:"G3_N14",type:"dotted"},{from:"G8_N31",to:"G4_N26",type:"solid"},{from:"G2_N07",to:"G12_N01",type:"dashed"},{from:"G5_N05",to:"G4_N26",type:"solid"},{from:"G6_N11",to:"G10_N01",type:"solid"},{from:"G7_N08",to:"G6_N05",type:"solid"},{from:"G1_N36",to:"G7_N03",type:"green"},{from:"G4_N18",to:"G3_N18",type:"dashed"},{from:"G9_N11",to:"G3_N12",type:"dotted"},{from:"G8_N22",to:"G4_N01",type:"solid"},{from:"G1_N14",to:"G7_N03",type:"green"},{from:"G2_N20",to:"G8_N17",type:"dotted"},{from:"G5_N02",to:"G8_N22",type:"solid"},{from:"G6_N20",to:"G9_N17",type:"solid"},{from:"G4_N21",to:"G5_N05",type:"solid"},{from:"G3_N15",to:"G6_N01",type:"dashed"},{from:"G11_N01",to:"G4_N10",type:"solid"},{from:"G10_N01",to:"G4_N25",type:"solid"},{from:"G1_N28",to:"G8_N30",type:"green"},{from:"G7_N08",to:"G12_N01",type:"dashed"},{from:"G9_N19",to:"G5_N10",type:"solid"},{from:"G8_N17",to:"G2_N20",type:"dotted"}
 ];
 
-const typeColors={"Estructura_Ecologica":"#46d6d0","Servicios_Publicos":"#5b9def","Gestion_Riesgo":"#d9824e","Movilidad_Transporte":"#e89a6c","Actividades_Economicas":"#f5c945","Sistema_Cuidado":"#8fd7c8","Espacio_Publico":"#8fd7c8","Equipamiento_Cultural":"#a276f2","Seguridad":"#d9824e","Clasificacion_Suelo":"#8e877f","Habitabilidad_Informalidad":"#e89a6c","Gobernanza_Instrumentos":"#a276f2"};
-const interactionColors={"Dispersión":"#46d6d0","Herbivoría":"#5b9def","Competencia":"#d9824e","Nidificación":"#e89a6c","Depredación":"#f5c945","Mutualismo":"#8fd7c8","Visita Floral":"#a276f2","Anidamiento":"#d9824e","Parasitismo":"#e89a6c"};
+const typeColors={"Estructura_Ecologica":"#8fd7c8","Servicios_Publicos":"#5b9def","Gestion_Riesgo":"#d9824e","Movilidad_Transporte":"#e89a6c","Actividades_Economicas":"#f5c945","Sistema_Cuidado":"#8fd7c8","Espacio_Publico":"#8fd7c8","Equipamiento_Cultural":"#a276f2","Seguridad":"#d9824e","Clasificacion_Suelo":"#8e877f","Habitabilidad_Informalidad":"#e89a6c","Gobernanza_Instrumentos":"#a276f2"};
+const edgeStyles={"solid":{color:"#5b9def",width:2,dash:null},"dashed":{color:"#e89a6c",width:2,dash:[8,4]},"dotted":{color:"#d9824e",width:2,dash:[2,4]},"green":{color:"#8fd7c8",width:2.5,dash:null}};
 
-let zoom=1,panX=0,panY=0,selectedNode=null,hiddenNodes=new Set();
-let canvas,ctx,positions={};
+let scene,camera,renderer,raycaster,mouse;
+let nodeObjects=[],edgeObjects=[],labelSprites=[];
+let zoom=1,selectedNode=null,hiddenNodes=new Set();
+let isPanning=false,panX=0,panY=0;
 
 function getNode(id){return nodes.find(n=>n.id===id)}
 function getNodeConnections(id){return edges.filter(e=>e.from===id||e.to===id)}
 function isHub(id){return getNodeConnections(id).length>=4}
 
-function calculateLayout(){
-  const hubs=nodes.filter(n=>isHub(n.id)),others=nodes.filter(n=>!isHub(n.id)),layout={};
-  const cx=600,cy=400;
-  hubs.forEach((h,i)=>{const a=(i/hubs.length)*Math.PI*2-Math.PI/2,r=180;layout[h.id]={x:cx+Math.cos(a)*r,y:cy+Math.sin(a)*r}});
-  others.forEach((n,i)=>{const conns=getNodeConnections(n.id);let ax=cx,ay=cy;
-    if(conns.length>0){const conn=conns.map(c=>getNode(c.from===n.id?c.to:c.from)).filter(Boolean);
-      if(conn.length>0){ax=conn.reduce((s,x)=>s+(layout[x.id]?.x||cx),0)/conn.length;ay=conn.reduce((s,x)=>s+(layout[x.id]?.y||cy),0)/conn.length}}
-    const a=(i/others.length)*Math.PI*2,r=320+(i%3)*60;
-    layout[n.id]={x:ax+Math.cos(a)*r*0.4,y:ay+Math.sin(a)*r*0.4}});
-  for(let i=0;i<150;i++){nodes.forEach(n=>{getNodeConnections(n.id).forEach(c=>{
-    const oid=c.from===n.id?c.to:c.from,o=layout[oid],cur=layout[n.id];
-    if(o&&cur){const dx=o.x-cur.x,dy=o.y-cur.y,d=Math.hypot(dx,dy)||1,min=80;
-      if(d<min){const p=(min-d)*0.02;cur.x-=dx/d*p;cur.y-=dy/d*p}}})})}
-  return layout;
-}
-
 function init(){
-  canvas=document.getElementById('networkCanvas');
-  ctx=canvas.getContext('2d');
-  resizeCanvas();
-  window.addEventListener('resize',resizeCanvas);
-  positions=calculateLayout();
-  setupInteractions();
+  const canvas=document.getElementById('threeCanvas');
+  const wrap=canvas.parentElement;
+  
+  scene=new THREE.Scene();
+  scene.background=new THREE.Color(0x0b0c0f);
+  
+  camera=new THREE.PerspectiveCamera(60,wrap.clientWidth/wrap.clientHeight,0.1,2000);
+  camera.position.set(0,0,800);
+  
+  renderer=new THREE.WebGLRenderer({canvas:canvas,antialias:true});
+  renderer.setSize(wrap.clientWidth,wrap.clientHeight);
+  renderer.setPixelRatio(window.devicePixelRatio);
+  
+  raycaster=new THREE.Raycaster();
+  mouse=new THREE.Vector2();
+  
+  // Lights
+  const ambientLight=new THREE.AmbientLight(0xffffff,0.6);
+  scene.add(ambientLight);
+  const directionalLight=new THREE.DirectionalLight(0xffffff,0.8);
+  directionalLight.position.set(100,100,100);
+  scene.add(directionalLight);
+  
+  // Grid
+  const gridHelper=new THREE.GridHelper(1200,30,0x222222,0x111111);
+  gridHelper.position.y=-200;
+  scene.add(gridHelper);
+  
+  createNetwork();
   populateFilters();
-  render();
+  setupInteractions(canvas);
   animate();
 }
 
-function resizeCanvas(){
-  const wrap=canvas.parentElement;
-  canvas.width=wrap.clientWidth*devicePixelRatio;
-  canvas.height=wrap.clientHeight*devicePixelRatio;
-  canvas.style.width=wrap.clientWidth+'px';
-  canvas.style.height=wrap.clientHeight+'px';
-  ctx.scale(devicePixelRatio,devicePixelRatio);
-}
-
-function setupInteractions(){
-  let isDragging=false,dragNode=null,startX,startY;
+function createNetwork(){
+  // Calculate hub positions in 3D
+  const hubs=nodes.filter(n=>isHub(n.id));
+  const others=nodes.filter(n=>!isHub(n.id));
+  const positions={};
   
-  canvas.addEventListener('mousedown',e=>{
-    const mx=e.offsetX,my=e.offsetY;
-    dragNode=null;
-    for(const [id,pos] of Object.entries(positions)){
-      if(hiddenNodes.has(id))continue;
-      const dx=mx-pos.x,dy=my-pos.y;
-      if(Math.hypot(dx,dy)<25){dragNode=id;break}
-    }
-    if(dragNode){
-      selectedNode=selectedNode===dragNode?null:dragNode;
-      render();
-    }else{
-      isDragging=true;startX=mx-panX;startY=my-panY;
-    }
+  // Hubs in a sphere around center
+  hubs.forEach((h,i)=>{
+    const phi=Math.acos(-1+(2*i)/hubs.length);
+    const theta=Math.sqrt(hubs.length*Math.PI)*phi;
+    positions[h.id]=new THREE.Vector3(
+      200*Math.cos(theta)*Math.sin(phi),
+      200*Math.sin(theta)*Math.sin(phi),
+      200*Math.cos(phi)
+    );
   });
   
-  canvas.addEventListener('mousemove',e=>{
-    const mx=e.offsetX,my=e.offsetY;
-    if(dragNode){
-      positions[dragNode].x=mx;positions[dragNode].y=my;
-    }else if(isDragging){
-      panX=mx-startX;panY=my-startY;
-    }
-    // Tooltip
-    let hovered=null;
-    for(const [id,pos] of Object.entries(positions)){
-      if(hiddenNodes.has(id))continue;
-      if(Math.hypot(mx-pos.x,my-pos.y)<25){hovered=id;break}
-    }
-    const tooltip=document.getElementById('tooltip');
-    if(hovered){
-      const n=getNode(hovered),c=getNodeConnections(hovered);
-      tooltip.innerHTML=`<strong>${n.id} · ${n.type.replace(/_/g,' ')}</strong><span>${n.label}</span><span style="color:${interactionColors[n.interaction]}">${n.interaction}</span><span>${c.length} conexiones${isHub(hovered)?' · <b style="color:var(--yellow)">Hub</b>':''}</span>`;
-      tooltip.style.left=(e.clientX+12)+'px';tooltip.style.top=(e.clientY+12)+'px';tooltip.classList.add('visible');
-      canvas.style.cursor='pointer';
-    }else{
-      tooltip.classList.remove('visible');
-      canvas.style.cursor=isDragging?'grabbing':'grab';
-    }
+  // Others distributed in outer shell
+  others.forEach((n,i)=>{
+    const phi=Math.acos(-1+(2*i)/others.length);
+    const theta=Math.sqrt(others.length*Math.PI)*phi;
+    const r=350+(i%3)*50;
+    positions[n.id]=new THREE.Vector3(
+      r*Math.cos(theta)*Math.sin(phi),
+      r*Math.sin(theta)*Math.sin(phi),
+      r*Math.cos(phi)
+    );
   });
   
-  canvas.addEventListener('mouseup',()=>{isDragging=false;dragNode=null});
-  canvas.addEventListener('mouseleave',()=>{isDragging=false;dragNode=null;document.getElementById('tooltip').classList.remove('visible')});
-  canvas.addEventListener('dblclick',e=>{
-    const mx=e.offsetX,my=e.offsetY;
-    for(const [id,pos] of Object.entries(positions)){
-      if(hiddenNodes.has(id))continue;
-      if(Math.hypot(mx-pos.x,my-pos.y)<25){
-        if(hiddenNodes.has(id))hiddenNodes.delete(id);else hiddenNodes.add(id);
-        render();break;
-      }
-    }
+  // Create node meshes
+  nodes.forEach(n=>{
+    const color=typeColors[n.type]||'#888';
+    const radius=isHub(n.id)?18:12;
+    const geometry=new THREE.SphereGeometry(radius,32,32);
+    const material=new THREE.MeshPhongMaterial({color:color,emissive:color,emissiveIntensity:0.2});
+    const mesh=new THREE.Mesh(geometry,material);
+    mesh.position.copy(positions[n.id]);
+    mesh.userData={id:n.id};
+    scene.add(mesh);
+    nodeObjects.push(mesh);
+    
+    // Label sprite
+    const canvas2=document.createElement('canvas');
+    const ctx=canvas2.getContext('2d');
+    canvas2.width=256;canvas2.height=64;
+    ctx.fillStyle='#f2ece3';
+    ctx.font='bold 24px Inter, sans-serif';
+    ctx.textAlign='center';
+    ctx.fillText(n.id,128,40);
+    const texture=new THREE.CanvasTexture(canvas2);
+    const spriteMaterial=new THREE.SpriteMaterial({map:texture,transparent:true});
+    const sprite=new THREE.Sprite(spriteMaterial);
+    sprite.position.copy(positions[n.id]);
+    sprite.position.y+=radius+15;
+    sprite.scale.set(60,15,1);
+    scene.add(sprite);
+    labelSprites.push(sprite);
+  });
+  
+  // Create edges
+  edges.forEach(e=>{
+    const f=nodes.find(n=>n.id===e.from);
+    const t=nodes.find(n=>n.id===e.to);
+    if(!f||!t)return;
+    
+    const fromPos=positions[e.from];
+    const toPos=positions[e.to];
+    const style=edgeStyles[e.type]||edgeStyles.solid;
+    
+    const material=new THREE.LineDashedMaterial({
+      color:style.color,
+      linewidth:style.width,
+      dashSize:style.dash?style.dash[0]:0,
+      gapSize:style.dash?style.dash[1]:0,
+      transparent:true,
+      opacity:0.6
+    });
+    
+    const geometry=new THREE.BufferGeometry().setFromPoints([fromPos,toPos]);
+    const line=new THREE.Line(geometry,material);
+    line.computeLineDistances();
+    scene.add(line);
+    edgeObjects.push(line);
   });
 }
 
@@ -299,7 +322,6 @@ function populateFilters(){
     const o=document.createElement('option');o.value=t;o.textContent=t.replace(/_/g,' ');tf.appendChild(o);
   });
   renderTogglePanel();
-  renderLegend();
 }
 
 function renderTogglePanel(){
@@ -307,18 +329,26 @@ function renderTogglePanel(){
   nodes.forEach(n=>{
     const a=!hiddenNodes.has(n.id),b=document.createElement('button');
     b.className='toggle-btn'+(a?' active':'');b.textContent=n.id;
-    b.onclick=()=>{if(hiddenNodes.has(n.id))hiddenNodes.delete(n.id);else hiddenNodes.add(n.id);render()};
+    b.onclick=()=>{if(hiddenNodes.has(n.id))hiddenNodes.delete(n.id);else hiddenNodes.add(n.id);updateVisibility()};
     p.appendChild(b);
   });
 }
 
-function renderLegend(){
-  const p=document.getElementById('legendPanel');p.innerHTML='';
-  Object.entries(typeColors).forEach(([t,c])=>{
-    const d=document.createElement('div');d.className='legend-item';
-    d.innerHTML=`<div class="legend-swatch" style="background:${c}"></div>${t.replace(/_/g,' ')}`;
-    p.appendChild(d);
+function updateVisibility(){
+  nodeObjects.forEach(obj=>{
+    const id=obj.userData.id;
+    obj.visible=!hiddenNodes.has(id);
   });
+  labelSprites.forEach((sprite,i)=>{
+    const id=nodes[i].id;
+    sprite.visible=!hiddenNodes.has(id);
+  });
+  edgeObjects.forEach((line,i)=>{
+    const e=edges[i];
+    line.visible=!hiddenNodes.has(e.from)&&!hiddenNodes.has(e.to);
+  });
+  updateStats();
+  renderTogglePanel();
 }
 
 function filterNodes(){
@@ -333,129 +363,83 @@ function filterNodes(){
       mt=tf==='all'||n.type===tf,mc2=c>=mc;
     if(!ms||!mt||!mc2)hiddenNodes.add(n.id);
   });
-  render();
+  updateVisibility();
 }
 
 function updateStats(){
   const vn=nodes.filter(n=>!hiddenNodes.has(n.id)),
     ve=edges.filter(e=>!hiddenNodes.has(e.from)&&!hiddenNodes.has(e.to)),
     hubs=vn.filter(n=>isHub(n.id)).length,
-    me=vn.length*(vn.length-1)/2,d=me>0?Math.round((ve.length/me)*100):0,
-    grado=vn.length>0?(ve.length*2/vn.length).toFixed(1):0;
+    me=vn.length*(vn.length-1)/2,d=me>0?Math.round((ve.length/me)*100):0;
   document.getElementById('statNodes').textContent=vn.length;
   document.getElementById('statEdges').textContent=ve.length;
   document.getElementById('statHubs').textContent=hubs;
   document.getElementById('statDensity').textContent=d+'%';
-  // Metrics panel
-  document.getElementById('mTaxones').textContent=vn.length;
-  document.getElementById('mInteracciones').textContent=ve.length;
-  document.getElementById('mHubs').textContent=hubs;
-  document.getElementById('mDensidad').textContent=d+'%';
-  document.getElementById('mGrado').textContent=grado;
-  document.getElementById('mComponentes').textContent=countComponents(vn);
 }
 
-function countComponents(visibleNodes){
-  const visited=new Set(),ids=new Set(visibleNodes.map(n=>n.id));
-  let components=0;
-  for(const n of visibleNodes){
-    if(visited.has(n.id))continue;
-    components++;
-    const queue=[n.id];
-    while(queue.length){
-      const curr=queue.pop();
-      if(visited.has(curr))continue;
-      visited.add(curr);
-      getNodeConnections(curr).forEach(c=>{
-        const other=c.from===curr?c.to:c.from;
-        if(!visited.has(other)&&ids.has(other))queue.push(other);
-      });
-    }
-  }
-  return components;
-}
-
-function render(){
-  renderTogglePanel();
-  updateStats();
-}
-
-function animate(){
-  ctx.clearRect(0,0,canvas.width,canvas.height);
-  ctx.save();
-  ctx.translate(panX,panY);
-  ctx.scale(zoom,zoom);
+function setupInteractions(canvas){
+  let isDragging=false,startX,startY;
   
-  // Draw edges
-  edges.forEach(e=>{
-    if(hiddenNodes.has(e.from)||hiddenNodes.has(e.to))return;
-    const f=positions[e.from],t=positions[e.to];
-    if(!f||!t)return;
-    const fromNode=getNode(e.from),toNode=getNode(e.to);
-    const color=interactionColors[fromNode.interaction]||'#888';
-    const isHighlighted=selectedNode&&(e.from===selectedNode||e.to===selectedNode);
-    ctx.beginPath();
-    ctx.moveTo(f.x,f.y);
-    ctx.lineTo(t.x,t.y);
-    ctx.strokeStyle=color;
-    ctx.lineWidth=isHighlighted?2.5:1;
-    ctx.globalAlpha=isHighlighted?1:0.35;
-    ctx.stroke();
-    ctx.globalAlpha=1;
+  canvas.addEventListener('mousedown',e=>{
+    isDragging=true;startX=e.clientX;startY=e.clientY;
   });
   
-  // Draw nodes
-  nodes.forEach(n=>{
-    if(hiddenNodes.has(n.id))return;
-    const pos=positions[n.id];
-    if(!pos)return;
-    const color=typeColors[n.type]||'#888';
-    const radius=isHub(n.id)?22:14;
-    const isSelected=selectedNode===n.id;
-    
-    // Glow
-    if(isSelected||isHub(n.id)){
-      ctx.beginPath();
-      ctx.arc(pos.x,pos.y,radius+8,0,Math.PI*2);
-      ctx.fillStyle=color+'15';
-      ctx.fill();
+  canvas.addEventListener('mousemove',e=>{
+    if(isDragging){
+      const dx=e.clientX-startX,dy=e.clientY-startY;
+      camera.position.x-=dx*0.5;
+      camera.position.y+=dy*0.5;
+      startX=e.clientX;startY=e.clientY;
     }
-    
-    // Circle
-    ctx.beginPath();
-    ctx.arc(pos.x,pos.y,radius,0,Math.PI*2);
-    ctx.fillStyle='#0b0c0f';
-    ctx.fill();
-    ctx.strokeStyle=isSelected?'#fff':color;
-    ctx.lineWidth=isSelected?3:isHub(n.id)?2.5:1.5;
-    ctx.stroke();
-    
-    // Icon (first letter of type)
-    ctx.fillStyle=color;
-    ctx.font=`${isHub(n.id)?'bold 10px':'bold 7px'} Inter, sans-serif`;
-    ctx.textAlign='center';
-    ctx.textBaseline='middle';
-    ctx.fillText(n.id,pos.x,pos.y);
-    
-    // Label
-    ctx.fillStyle='#f2ece3';
-    ctx.font='600 8px Inter, sans-serif';
-    ctx.textAlign='center';
-    ctx.fillText(n.id,pos.x,pos.y+radius+12);
-    
-    // Interaction badge
-    ctx.fillStyle=interactionColors[n.interaction]||'#888';
-    ctx.font='600 6px Inter, sans-serif';
-    ctx.fillText(n.interaction,pos.x,pos.y+radius+22);
+    // Raycaster for hover
+    const rect=canvas.getBoundingClientRect();
+    mouse.x=((e.clientX-rect.left)/rect.width)*2-1;
+    mouse.y=-((e.clientY-rect.top)/rect.height)*2+1;
+    raycaster.setFromCamera(mouse,camera);
+    const intersects=raycaster.intersectObjects(nodeObjects.filter(o=>o.visible));
+    const tooltip=document.getElementById('tooltip');
+    if(intersects.length>0){
+      const n=getNode(intersects[0].object.userData.id);
+      const c=getNodeConnections(n.id);
+      tooltip.innerHTML=`<strong>${n.id} · ${n.type.replace(/_/g,' ')}</strong><span>${n.label}</span><span>${c.length} conexiones${isHub(n.id)?' · <b style="color:var(--yellow)">Hub</b>':''}</span>`;
+      tooltip.style.left=(e.clientX+12)+'px';tooltip.style.top=(e.clientY+12)+'px';tooltip.classList.add('visible');
+      canvas.style.cursor='pointer';
+    }else{
+      tooltip.classList.remove('visible');
+      canvas.style.cursor=isDragging?'grabbing':'grab';
+    }
   });
   
-  ctx.restore();
-  requestAnimationFrame(animate);
+  canvas.addEventListener('mouseup',()=>{isDragging=false});
+  canvas.addEventListener('mouseleave',()=>{isDragging=false;document.getElementById('tooltip').classList.remove('visible')});
+  
+  canvas.addEventListener('click',e=>{
+    const rect=canvas.getBoundingClientRect();
+    mouse.x=((e.clientX-rect.left)/rect.width)*2-1;
+    mouse.y=-((e.clientY-rect.top)/rect.height)*2+1;
+    raycaster.setFromCamera(mouse,camera);
+    const intersects=raycaster.intersectObjects(nodeObjects.filter(o=>o.visible));
+    if(intersects.length>0){
+      selectNode(intersects[0].object.userData.id);
+    }
+  });
+  
+  canvas.addEventListener('dblclick',e=>{
+    const rect=canvas.getBoundingClientRect();
+    mouse.x=((e.clientX-rect.left)/rect.width)*2-1;
+    mouse.y=-((e.clientY-rect.top)/rect.height)*2+1;
+    raycaster.setFromCamera(mouse,camera);
+    const intersects=raycaster.intersectObjects(nodeObjects.filter(o=>o.visible));
+    if(intersects.length>0){
+      const id=intersects[0].object.userData.id;
+      if(hiddenNodes.has(id))hiddenNodes.delete(id);else hiddenNodes.add(id);
+      updateVisibility();
+    }
+  });
 }
 
 function selectNode(id){
   selectedNode=selectedNode===id?null:id;
-  render();
   const d=document.getElementById('nodeDetails');
   if(!selectedNode){
     d.innerHTML='<h3><i class="fa-solid fa-crosshairs"></i> Inspección del nodo</h3><p>Haz clic en un nodo para ver sus conexiones. Doble clic para ocultar/mostrar.</p>';
@@ -465,39 +449,35 @@ function selectNode(id){
   let h=`<h3><i class="fa-solid fa-crosshairs"></i> Inspección del nodo</h3>`;
   h+=`<h4>${n.id}</h4><p style="font-size:10px;color:var(--muted);margin-bottom:8px">${n.label}</p>`;
   h+=`<span class="node-type" style="background:${typeColors[n.type]}22;color:${typeColors[n.type]}">${n.type.replace(/_/g,' ')}</span>`;
-  h+=`<div style="margin-top:8px"><span class="interaction-badge" style="background:${interactionColors[n.interaction]}22;color:${interactionColors[n.interaction]}">${n.interaction}</span></div>`;
   h+=`<div style="font-size:10px;margin-top:8px"><strong>Conexiones:</strong> ${conns.length}</div>`;
   if(isHub(n.id))h+=`<div style="font-size:10px;color:var(--yellow);margin-top:4px"><i class="fa-solid fa-star"></i> Hub de red</div>`;
   if(conns.length>0){
     h+='<ul class="connections-list">';
     conns.forEach(c=>{
       const o=c.from===selectedNode?c.to:c.from;
-      const other=getNode(o);
-      h+=`<li><i class="fa-solid fa-arrow-right" style="color:${typeColors[n.type]}"></i> ${o} · ${other.interaction}</li>`;
+      h+=`<li><i class="fa-solid fa-arrow-right" style="color:${typeColors[n.type]}"></i> ${o}</li>`;
     });
     h+='</ul>';
   }
   d.innerHTML=h;
 }
 
-function toggleMetrics(){
-  document.getElementById('metricsPanel').classList.toggle('visible');
+function zoomIn(){zoom=Math.min(zoom*1.2,3);camera.position.multiplyScalar(1/zoom);zoom=1}
+function zoomOut(){zoom=Math.max(zoom/1.2,0.3);camera.position.multiplyScalar(1/zoom);zoom=1}
+function zoomReset(){camera.position.set(0,0,800)}
+function resetView(){zoomReset();hiddenNodes.clear();selectedNode=null;document.getElementById('searchInput').value='';document.getElementById('typeFilter').value='all';document.getElementById('minConn').value=0;updateVisibility()}
+
+function animate(){
+  requestAnimationFrame(animate);
+  renderer.render(scene,camera);
 }
 
-function zoomIn(){zoom=Math.min(zoom*1.2,3)}
-function zoomOut(){zoom=Math.max(zoom/1.2,0.3)}
-function zoomReset(){zoom=1;panX=0;panY=0}
-function resetView(){zoomReset();hiddenNodes.clear();selectedNode=null;document.getElementById('searchInput').value='';document.getElementById('typeFilter').value='all';document.getElementById('minConn').value=0;render()}
-
-function exportPNG(){
-  const link=document.createElement('a');
-  link.download='red-kennedy-socioecologica.png';
-  link.href=canvas.toDataURL('image/png');
-  link.click();
-}
-
-// Expose selectNode for potential external use
-window.selectNode=selectNode;
+window.addEventListener('resize',()=>{
+  const wrap=document.getElementById('threeCanvas').parentElement;
+  camera.aspect=wrap.clientWidth/wrap.clientHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(wrap.clientWidth,wrap.clientHeight);
+});
 
 init();
 </script>
