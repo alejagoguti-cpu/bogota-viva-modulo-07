@@ -129,6 +129,40 @@ body{background:var(--bg);color:var(--text);font-family:Inter,system-ui,sans-ser
   </main>
 </div>
 <div class="tooltip" id="tooltip"></div>
+<!-- Node Inspector Popup -->
+<div class="node-inspector" id="nodeInspector">
+  <div class="inspector-header">
+    <div>
+      <div class="node-title" id="mNodeTitle">Nodo</div>
+      <div class="node-subtitle" id="mNodeSubtitle">Tipo</div>
+    </div>
+    <button class="btn-close" onclick="closeInspector()">&times;</button>
+  </div>
+  <div class="data-grid">
+    <div class="metric-card">
+      <div class="metric-val" id="mDegreeVal">0</div>
+      <div class="metric-lbl">Conexiones</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-val" id="mTypeVal">-</div>
+      <div class="metric-lbl">Capa</div>
+    </div>
+  </div>
+  <div class="sec-header">Rol Ecológico y Nicho</div>
+  <div class="text-content" id="mRoleBox">Descripción del rol territorial...</div>
+  <div class="sec-header">Ubicación en Kennedy</div>
+  <div class="text-content" id="mLocBox">Sector Kennedy, Bogotá...</div>
+  <div class="sec-header">Vulnerabilidad y Presión de Hábitat</div>
+  <div class="text-content alert" id="mAlertBox">Condiciones de riesgo o presión territorial...</div>
+  <div class="sec-header">Interacciones Directas</div>
+  <div class="neighbor-scroll" id="mNeighborList"></div>
+  <div class="inspector-actions">
+    <button onclick="focusSelectedNode()">Centrar</button>
+    <button onclick="hideCurrentNode()">Ocultar</button>
+    <button onclick="closeInspector()">Cerrar</button>
+  </div>
+</div>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script>
 const nodes=[
@@ -421,6 +455,7 @@ function setupInteractions(canvas){
     const intersects=raycaster.intersectObjects(nodeObjects.filter(o=>o.visible));
     if(intersects.length>0){
       selectNode(intersects[0].object.userData.id);
+      showInspector(intersects[0].object.userData.id);
     }
   });
   
@@ -436,6 +471,95 @@ function setupInteractions(canvas){
       updateVisibility();
     }
   });
+}
+
+function showInspector(id){
+  const n=getNode(id),conns=getNodeConnections(id);
+  const inspector=document.getElementById('nodeInspector');
+  document.getElementById('mNodeTitle').textContent=n.id;
+  document.getElementById('mNodeSubtitle').textContent=n.type.replace(/_/g,' ');
+  document.getElementById('mDegreeVal').textContent=conns.length;
+  document.getElementById('mTypeVal').textContent=n.type.split('_')[0];
+  
+  const roleDescriptions={
+    "Estructura_Ecologica":"Nodo de conectividad hídrica y corredor biológico. Sostiene la capacidad de restauración ecológica del territorio.",
+    "Servicios_Publicos":"Infraestructura de saneamiento básico y gestión hídrica. Condiciona la capacidad de carga urbana.",
+    "Gestion_Riesgo":"Zona con restricción por amenaza natural. Limita el desarrollo urbano y requiere manejo especial.",
+    "Movilidad_Transporte":"Eje estructurante de movilidad. Articula la conectividad territorial y el acceso a oportunidades.",
+    "Actividades_Economicas":"Nodo de actividad productiva y empleo. Genera dinámicas económicas territoriales.",
+    "Sistema_Cuidado":"Equipamiento de cuidado y salud. Cubre necesidades de la población vulnerable.",
+    "Espacio_Publico":"Espacio de encuentro y recreación. Calidad de vida y cohesión social.",
+    "Equipamiento_Cultural":"Infraestructura cultural y educativa. Fortalece el tejido social y la identidad.",
+    "Seguridad":"Nodo de seguridad y convivencia. Presencia institucional y control territorial.",
+    "Clasificacion_Suelo":"Determinación de uso del suelo. Condiciona las transformaciones urbanas posibles.",
+    "Habitabilidad_Informalidad":"Tejido urbano de origen informal. Requiere mejoramiento integral y regularización.",
+    "Gobernanza_Instrumentos":"Instrumento de planeación y gestión territorial. Regula las decisiones de actores públicos y privados."
+  };
+  document.getElementById('mRoleBox').textContent=roleDescriptions[n.type]||"Rol territorial estratégico para el desarrollo del sector.";
+  
+  const locDescriptions={
+    "Estructura_Ecologica":"Humedales El Burro, La Vaca, Techo y ronda del Río Bogotá. Borde sur-occidente de Kennedy.",
+    "Servicios_Publicos":"Canales Cundinamarca y Américas, PTAR Canoas y zona de influencia del sistema de saneamiento.",
+    "Gestion_Riesgo":"Zonas de reasentamiento, suelos de protección y puntos críticos de inundación IDIGER.",
+    "Movilidad_Transporte":"Corredores de Metro, TransMilenio, ALO, Avenida Boyacá y red ciclorrutas.",
+    "Actividades_Economicas":"Corabastos, zona franca Fontibón, nodos logísticos y plazas de mercado.",
+    "Sistema_Cuidado":"Manzanas del cuidado, hospitales y colegios de Kennedy y Bosa.",
+    "Espacio_Publico":"Parque Metropolitano Timiza, Alameda El Porvenir y sistema de espacios públicos.",
+    "Equipamiento_Cultural":"Biblioteca Pública El Tintal Manuel Zapata Olivella.",
+    "Seguridad":"CAI y estaciones de policía del sector Corabastos.",
+    "Clasificacion_Suelo":"Tratamientos de desarrollo, mejoramiento integral y áreas industriales.",
+    "Habitabilidad_Informalidad":"Tejidos urbanos consolidados de origen informal de Patio Bonito y El Amparo.",
+    "Gobernanza_Instrumentos":"Instancias de planeación distrital, veeduría ciudadana y macroproyectos de interés social."
+  };
+  document.getElementById('mLocBox').textContent=locDescriptions[n.type]||"Sector Kennedy, locality de Kennedy, Bogotá D.C.";
+  
+  const alertDescriptions={
+    "Estructura_Ecologica":"Sensible a pérdida de conectividad hídrica, contaminación y presión urbanística sobre los humedales.",
+    "Servicios_Publicos":"Vulnerable a la saturación de la infraestructura de saneamiento y la capacidad de las PTAR.",
+    "Gestion_Riesgo":"Zona con restricción por amenaza natural. No mitigable en algunos sectores.",
+    "Movilidad_Transporte":"Presión por congestión vehicular y demanda de transporte público insuficiente.",
+    "Actividades_Economicas":"Presión por conflictos de uso del suelo, informalidad comercial y logística.",
+    "Sistema_Cuidado":"Déficits en cobertura de equipamientos de salud y cuidado para la población vulnerable.",
+    "Espacio_Publico":"Carencia de espacio público verde per cápita. Presión por privatización del espacio.",
+    "Equipamiento_Cultural":"Cobertura insuficiente de equipamientos culturales en el sector.",
+    "Seguridad":"Presión por inseguridad ciudadana y presencia de economías ilegales.",
+    "Clasificacion_Suelo":"Conflictos por cambios de uso del suelo y presión urbanística sobre suelos de protección.",
+    "Habitabilidad_Informalidad":"Vulnerabilidad por déficit de servicios públicos, riesgo y falta de regularización.",
+    "Gobernanza_Instrumentos":"Tensiones entre intereses públicos y privados en la toma de decisiones territoriales."
+  };
+  document.getElementById('mAlertBox').textContent=alertDescriptions[n.type]||"Presión territorial por transformación urbana acelerada.";
+  
+  const neighborList=document.getElementById('mNeighborList');
+  neighborList.innerHTML='';
+  conns.forEach(c=>{
+    const otherId=c.from===id?c.to:c.from;
+    const other=getNode(otherId);
+    const row=document.createElement('div');
+    row.className='neighbor-row';
+    row.innerHTML=`<span>${otherId} · ${other.type.split('_')[0]}</span><span style="color:${typeColors[other.type]}">${c.type}</span>`;
+    row.onclick=()=>{selectNode(otherId)};
+    neighborList.appendChild(row);
+  });
+  
+  inspector.classList.add('visible');
+}
+
+function closeInspector(){
+  document.getElementById('nodeInspector').classList.remove('visible');
+}
+
+function focusSelectedNode(){
+  // Reset camera to center
+  camera.position.set(0,0,800);
+  zoomReset();
+}
+
+function hideCurrentNode(){
+  if(selectedNode){
+    hiddenNodes.add(selectedNode);
+    updateVisibility();
+    closeInspector();
+  }
 }
 
 function selectNode(id){
