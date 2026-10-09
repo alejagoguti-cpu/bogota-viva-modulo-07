@@ -19,6 +19,7 @@
   --green: #8fd7c8;
   --purple: #a276f2;
   --yellow: #f5c945;
+  --blue: #5b9def;
 }
 * { box-sizing: border-box; margin: 0; padding: 0; }
 body {
@@ -201,20 +202,6 @@ body {
   font-weight: 600;
   margin-bottom: 8px;
 }
-.node-details .node-type.dinamica { background: rgba(70,214,208,0.15); color: var(--teal); }
-.node-details .node-type.actor { background: rgba(232,154,108,0.15); color: var(--orange); }
-.node-details .node-rol {
-  font-size: 10px;
-  margin: 4px 0;
-  padding: 4px 8px;
-  border-radius: 4px;
-  background: #111817;
-}
-.node-details .node-rol.habilita { border-left: 3px solid var(--teal); }
-.node-details .node-rol.impide { border-left: 3px solid var(--red); }
-.node-details .node-rol.mixta { border-left: 3px solid var(--orange); }
-.node-details .node-rol.bottom-up { border-left: 3px solid var(--green); }
-.node-details .node-rol.top-down { border-left: 3px solid var(--purple); }
 .connections-list {
   margin-top: 8px;
   padding-left: 0;
@@ -336,22 +323,27 @@ body {
 .toggle-panel {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 6px;
+  gap: 4px;
   margin-top: 8px;
+  max-height: 200px;
+  overflow-y: auto;
 }
 .toggle-btn {
-  padding: 6px 8px;
+  padding: 4px 6px;
   border: 1px solid var(--border);
   border-radius: 6px;
   background: #111817;
   color: var(--muted);
-  font-size: 9px;
+  font-size: 8px;
   cursor: pointer;
   transition: all 0.18s;
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: 3px;
   justify-content: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .toggle-btn:hover {
   border-color: var(--teal);
@@ -363,7 +355,7 @@ body {
   color: var(--teal);
 }
 .toggle-btn i {
-  font-size: 10px;
+  font-size: 8px;
 }
 </style>
 </head>
@@ -389,22 +381,10 @@ body {
 
     <div class="content">
       <div class="canvas-wrap">
-        <svg id="networkSvg" viewBox="0 0 1000 700" preserveAspectRatio="xMidYMid meet">
+        <svg id="networkSvg" viewBox="0 0 1200 800" preserveAspectRatio="xMidYMid meet">
           <defs>
-            <marker id="arrow-habilita" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
-              <path d="M0,0 L8,4 L0,8 Z" fill="#46d6d0"/>
-            </marker>
-            <marker id="arrow-impide" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
-              <path d="M0,0 L8,4 L0,8 Z" fill="#d9824e"/>
-            </marker>
-            <marker id="arrow-mixta" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
-              <path d="M0,0 L8,4 L0,8 Z" fill="#e89a6c"/>
-            </marker>
-            <marker id="arrow-bottom-up" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
-              <path d="M0,0 L8,4 L0,8 Z" fill="#8fd7c8"/>
-            </marker>
-            <marker id="arrow-top-down" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
-              <path d="M0,0 L8,4 L0,8 Z" fill="#a276f2"/>
+            <marker id="arrow" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+              <path d="M0,0 L6,3 L0,6 Z" fill="#888"/>
             </marker>
           </defs>
           <g id="edgesLayer"></g>
@@ -435,24 +415,11 @@ body {
             <label>Tipo de nodo</label>
             <select id="typeFilter" onchange="filterNodes()">
               <option value="all">Todos</option>
-              <option value="Dinamica">Dinámicas</option>
-              <option value="Actor">Actores</option>
-            </select>
-          </div>
-          <div class="filter-group">
-            <label>Rol</label>
-            <select id="rolFilter" onchange="filterNodes()">
-              <option value="all">Todos</option>
-              <option value="Habilita">Habilita</option>
-              <option value="Impide">Impide</option>
-              <option value="Mixta">Mixta</option>
-              <option value="Bottom-up">Bottom-up</option>
-              <option value="Top-down">Top-down</option>
             </select>
           </div>
           <div class="filter-group">
             <label>Conexiones mínimas: <span id="minConnLabel">0</span></label>
-            <input type="range" id="minConn" min="0" max="5" value="0" oninput="filterNodes()">
+            <input type="range" id="minConn" min="0" max="10" value="0" oninput="filterNodes()">
           </div>
         </div>
 
@@ -468,12 +435,7 @@ body {
 
         <div class="panel">
           <h3><i class="fa-solid fa-legend"></i> Leyenda</h3>
-          <div class="legend">
-            <div class="legend-item"><div class="legend-swatch" style="background:#46d6d0"></div>Dinámica</div>
-            <div class="legend-item"><div class="legend-swatch" style="background:#e89a6c"></div>Actor</div>
-            <div class="legend-item"><div class="legend-swatch" style="background:#8fd7c8"></div>Bottom-up</div>
-            <div class="legend-item"><div class="legend-swatch" style="background:#a276f2"></div>Top-down</div>
-          </div>
+          <div class="legend" id="legendPanel"></div>
         </div>
       </aside>
     </div>
@@ -484,55 +446,106 @@ body {
 
 <script>
 const nodes = [
-  {id:"D1",label:"Desarrollo informal historico de Tintal/Patio Bonito",tipo:"Dinamica",rol:"Habilita",icon:"fa-house-chimney"},
-  {id:"D2",label:"Priorizacion presupuestal centralizada (Art.480, ciclo de gobierno)",tipo:"Dinamica",rol:"Impide",icon:"fa-coins"},
-  {id:"D3",label:"Reparto de cargas y beneficios sin trazabilidad publica (Art.510.2)",tipo:"Dinamica",rol:"Impide",icon:"fa-scale-unbalanced"},
-  {id:"D4",label:"Proteccion a moradores como derecho invocable sin presupuesto propio",tipo:"Dinamica",rol:"Mixta",icon:"fa-shield-halved"},
-  {id:"D5",label:"Actor privado unico con capacidad de ejecutar AE09",tipo:"Dinamica",rol:"Impide",icon:"fa-plane"},
-  {id:"D6",label:"Mejoramiento Integral de Barrios como respuesta reactiva del Estado",tipo:"Dinamica",rol:"Mixta",icon:"fa-hammer"},
-  {id:"A1",label:"JAC y organizaciones comunitarias de Tintal-Patio Bonito",tipo:"Actor",rol:"Bottom-up",icon:"fa-people-group"},
-  {id:"A2",label:"Concejo de Bogota / administracion distrital",tipo:"Actor",rol:"Top-down",icon:"fa-landmark"},
-  {id:"A3",label:"Secretaria de Planeacion / curaduria urbana",tipo:"Actor",rol:"Top-down",icon:"fa-compass-drafting"},
-  {id:"A4",label:"Inversionista-operador privado (AE09)",tipo:"Actor",rol:"Top-down",icon:"fa-hand-holding-dollar"},
-  {id:"A5",label:"Secretaria de Integracion Social / Salud",tipo:"Actor",rol:"Top-down",icon:"fa-heart-pulse"}
+  {id:"G1_N10",label:"Humedal La Vaca",type:"Estructura_Ecologica",icon:"fa-water"},
+  {id:"G1_N11",label:"Humedal El Burro",type:"Estructura_Ecologica",icon:"fa-water"},
+  {id:"G1_N14",label:"Humedal Techo",type:"Estructura_Ecologica",icon:"fa-water"},
+  {id:"G1_N21",label:"Rio Fucha",type:"Estructura_Ecologica",icon:"fa-water"},
+  {id:"G1_N28",label:"Quebrada Limas",type:"Estructura_Ecologica",icon:"fa-water"},
+  {id:"G1_N01",label:"Rio Bogota",type:"Estructura_Ecologica",icon:"fa-water"},
+  {id:"G1_N36",label:"Corredor Ecologico de Ronda Rio Bogota",type:"Estructura_Ecologica",icon:"fa-tree"},
+  {id:"G1_N38",label:"Area de Manejo Especial del Rio Bogota",type:"Estructura_Ecologica",icon:"fa-shield-halved"},
+  {id:"G8_N30",label:"Canal Cundinamarca",type:"Servicios_Publicos",icon:"fa-faucet-drip"},
+  {id:"G8_N31",label:"Canal Americas",type:"Servicios_Publicos",icon:"fa-faucet-drip"},
+  {id:"G2_N06",label:"Zonas de Reasentamiento Prioritario",type:"Gestion_Riesgo",icon:"fa-triangle-exclamation"},
+  {id:"G2_N07",label:"Suelos de Proteccion por Riesgo no Mitigable",type:"Gestion_Riesgo",icon:"fa-triangle-exclamation"},
+  {id:"G2_N20",label:"Puntos Criticos de Inundacion (IDIGER)",type:"Gestion_Riesgo",icon:"fa-flood-water"},
+  {id:"G4_N01",label:"Primera Linea del Metro de Bogota PLMB",type:"Movilidad_Transporte",icon:"fa-train-subway"},
+  {id:"G4_N10",label:"Corredor Verde Av Ciudad de Cali",type:"Movilidad_Transporte",icon:"fa-road"},
+  {id:"G4_N18",label:"Avenida Longitudinal de Occidente ALO Sur",type:"Movilidad_Transporte",icon:"fa-road"},
+  {id:"G4_N21",label:"Patio Taller Metro Bosa",type:"Movilidad_Transporte",icon:"fa-warehouse"},
+  {id:"G4_N17",label:"Red Ciclorrutas Prioritarias",type:"Movilidad_Transporte",icon:"fa-bicycle"},
+  {id:"G4_N25",label:"Portal Americas TransMilenio",type:"Movilidad_Transporte",icon:"fa-bus"},
+  {id:"G4_N26",label:"Avenida Boyaca",type:"Movilidad_Transporte",icon:"fa-road"},
+  {id:"G5_N05",label:"Nodo Logistico Calle 13",type:"Actividades_Economicas",icon:"fa-truck-fast"},
+  {id:"G5_N10",label:"Centro de Abasto Corabastos",type:"Actividades_Economicas",icon:"fa-store"},
+  {id:"G5_N14",label:"Plaza de Mercado Fontibon",type:"Actividades_Economicas",icon:"fa-store"},
+  {id:"G5_N02",label:"Zona Franca Fontibon",type:"Actividades_Economicas",icon:"fa-industry"},
+  {id:"G8_N22",label:"Data Center Fontibon",type:"Servicios_Publicos",icon:"fa-server"},
+  {id:"G8_N17",label:"Planta de Tratamiento de Aguas Residuales (PTAR Canoas)",type:"Servicios_Publicos",icon:"fa-recycle"},
+  {id:"G6_N05",label:"Manzana del Cuidado Kennedy",type:"Sistema_Cuidado",icon:"fa-hands-holding-child"},
+  {id:"G6_N20",label:"Hospital de Kennedy",type:"Sistema_Cuidado",icon:"fa-hospital"},
+  {id:"G6_N01",label:"Manzana del Cuidado Bosa",type:"Sistema_Cuidado",icon:"fa-hands-holding-child"},
+  {id:"G6_N11",label:"Hospital de Bosa",type:"Sistema_Cuidado",icon:"fa-hospital"},
+  {id:"G6_N17",label:"Colegio Sede Bosa Porvenir",type:"Sistema_Cuidado",icon:"fa-school"},
+  {id:"G7_N03",label:"Parque Metropolitano Timiza",type:"Espacio_Publico",icon:"fa-tree"},
+  {id:"G7_N08",label:"Alameda El Porvenir",type:"Espacio_Publico",icon:"fa-tree"},
+  {id:"G11_N01",label:"Biblioteca Publica El Tintal Manuel Zapata Olivella",type:"Equipamiento_Cultural",icon:"fa-book-open"},
+  {id:"G10_N01",label:"CAI y Estacion de Policia Corabastos",type:"Seguridad",icon:"fa-shield-halved"},
+  {id:"G3_N12",label:"Tratamiento de Desarrollo Zona Occidente",type:"Clasificacion_Suelo",icon:"fa-map"},
+  {id:"G3_N14",label:"Tratamiento de Mejoramiento Integral Estructural",type:"Clasificacion_Suelo",icon:"fa-map"},
+  {id:"G3_N15",label:"Tratamiento de Mejoramiento Integral Habitabilidad",type:"Clasificacion_Suelo",icon:"fa-map"},
+  {id:"G3_N18",label:"Areas de Actividad Industrial y Logistica",type:"Clasificacion_Suelo",icon:"fa-map"},
+  {id:"G12_N01",label:"Tejido Urbano Consolidado de Origen Informal (Patio Bonito El Amparo)",type:"Habitabilidad_Informalidad",icon:"fa-house-chimney"},
+  {id:"G9_N03",label:"Reparto Proporcional de Cargas y Beneficios",type:"Gobernanza_Instrumentos",icon:"fa-scale-balanced"},
+  {id:"G9_N17",label:"Subsidio Distrital de Vivienda",type:"Gobernanza_Instrumentos",icon:"fa-hand-holding-dollar"},
+  {id:"G9_N11",label:"Empresa de Renovacion y Desarrollo Urbano ERU",type:"Gobernanza_Instrumentos",icon:"fa-building"},
+  {id:"G9_N19",label:"Macroproyectos de Interes Social MIS",type:"Gobernanza_Instrumentos",icon:"fa-handshake"},
+  {id:"G9_N18",label:"Comision de Veeduria Ciudadana POT",type:"Gobernanza_Instrumentos",icon:"fa-users"}
 ];
 
 const edges = [
-  {from:"D1",to:"A1",type:"habilita"},
-  {from:"D1",to:"A2",type:"impide"},
-  {from:"D2",to:"A2",type:"habilita"},
-  {from:"D2",to:"A3",type:"impide"},
-  {from:"D3",to:"A3",type:"impide"},
-  {from:"D3",to:"A1",type:"mixta"},
-  {from:"D4",to:"A1",type:"habilita"},
-  {from:"D4",to:"A2",type:"mixta"},
-  {from:"D5",to:"A4",type:"habilita"},
-  {from:"D5",to:"A2",type:"impide"},
-  {from:"D6",to:"A1",type:"habilita"},
-  {from:"D6",to:"A5",type:"mixta"},
-  {from:"A1",to:"A2",type:"bottom-up"},
-  {from:"A2",to:"A3",type:"top-down"},
-  {from:"A3",to:"A4",type:"top-down"},
-  {from:"A4",to:"A5",type:"top-down"},
-  {from:"A1",to:"A5",type:"bottom-up"}
+  {from:"G1_N01",to:"G1_N21"},{from:"G1_N01",to:"G1_N28"},{from:"G1_N01",to:"G1_N36"},
+  {from:"G1_N10",to:"G1_N11"},{from:"G1_N10",to:"G1_N14"},{from:"G1_N11",to:"G1_N14"},
+  {from:"G1_N21",to:"G1_N28"},{from:"G1_N36",to:"G1_N38"},
+  {from:"G8_N30",to:"G8_N31"},{from:"G8_N17",to:"G8_N22"},
+  {from:"G2_N06",to:"G2_N07"},{from:"G2_N06",to:"G2_N20"},{from:"G2_N07",to:"G2_N20"},
+  {from:"G4_N01",to:"G4_N21"},{from:"G4_N01",to:"G4_N25"},{from:"G4_N10",to:"G4_N18"},
+  {from:"G4_N10",to:"G4_N26"},{from:"G4_N17",to:"G4_N26"},{from:"G4_N18",to:"G4_N26"},
+  {from:"G4_N25",to:"G4_N26"},{from:"G4_N21",to:"G4_N25"},
+  {from:"G5_N05",to:"G5_N10"},{from:"G5_N05",to:"G5_N02"},{from:"G5_N10",to:"G5_N14"},
+  {from:"G5_N10",to:"G10_N01"},{from:"G5_N14",to:"G5_N02"},
+  {from:"G6_N05",to:"G6_N20"},{from:"G6_N01",to:"G6_N11"},{from:"G6_N01",to:"G6_N17"},
+  {from:"G6_N05",to:"G6_N01"},{from:"G6_N20",to:"G6_N11"},
+  {from:"G7_N03",to:"G7_N08"},{from:"G7_N03",to:"G1_N10"},
+  {from:"G3_N12",to:"G3_N14"},{from:"G3_N12",to:"G3_N15"},{from:"G3_N14",to:"G3_N15"},
+  {from:"G3_N18",to:"G5_N02"},{from:"G3_N18",to:"G5_N05"},
+  {from:"G9_N03",to:"G9_N17"},{from:"G9_N03",to:"G9_N19"},{from:"G9_N11",to:"G9_N18"},
+  {from:"G9_N17",to:"G9_N19"},{from:"G9_N11",to:"G9_N19"},
+  {from:"G12_N01",to:"G6_N01"},{from:"G12_N01",to:"G2_N06"},
+  {from:"G11_N01",to:"G7_N03"},{from:"G11_N01",to:"G6_N05"},
+  {from:"G8_N22",to:"G5_N02"},{from:"G8_N17",to:"G1_N21"},
+  {from:"G4_N25",to:"G5_N10"},{from:"G4_N26",to:"G3_N12"},
+  {from:"G6_N20",to:"G10_N01"},{from:"G7_N08",to:"G4_N10"},
+  {from:"G9_N18",to:"G3_N12"},{from:"G9_N17",to:"G6_N01"},
+  {from:"G1_N38",to:"G2_N20"},{from:"G8_N30",to:"G1_N21"},
+  {from:"G5_N14",to:"G10_N01"},{from:"G6_N17",to:"G6_N01"},
+  {from:"G4_N17",to:"G7_N03"},{from:"G3_N15",to:"G12_N01"},
+  {from:"G9_N03",to:"G3_N14"},{from:"G8_N31",to:"G4_N26"},
+  {from:"G2_N07",to:"G12_N01"},{from:"G5_N05",to:"G4_N26"},
+  {from:"G6_N11",to:"G10_N01"},{from:"G7_N08",to:"G6_N05"},
+  {from:"G1_N36",to:"G7_N03"},{from:"G4_N18",to:"G3_N18"},
+  {from:"G9_N11",to:"G3_N12"},{from:"G8_N22",to:"G4_N01"},
+  {from:"G1_N14",to:"G7_N03"},{from:"G2_N20",to:"G8_N17"},
+  {from:"G5_N02",to:"G8_N22"},{from:"G6_N20",to:"G9_N17"},
+  {from:"G4_N21",to:"G5_N05"},{from:"G3_N15",to:"G6_N01"},
+  {from:"G11_N01",to:"G4_N10"},{from:"G10_N01",to:"G4_N25"},
+  {from:"G1_N28",to:"G8_N30"},{from:"G7_N08",to:"G12_N01"},
+  {from:"G9_N19",to:"G5_N10"},{from:"G8_N17",to:"G2_N20"}
 ];
 
-const colorMap = {
-  "Dinamica": "#46d6d0",
-  "Actor": "#e89a6c",
-  "Habilita": "#46d6d0",
-  "Impide": "#d9824e",
-  "Mixta": "#e89a6c",
-  "Bottom-up": "#8fd7c8",
-  "Top-down": "#a276f2"
-};
-
-const edgeColorMap = {
-  "habilita": "#46d6d0",
-  "impide": "#d9824e",
-  "mixta": "#e89a6c",
-  "bottom-up": "#8fd7c8",
-  "top-down": "#a276f2"
+const typeColors = {
+  "Estructura_Ecologica": "#46d6d0",
+  "Servicios_Publicos": "#5b9def",
+  "Gestion_Riesgo": "#d9824e",
+  "Movilidad_Transporte": "#e89a6c",
+  "Actividades_Economicas": "#f5c945",
+  "Sistema_Cuidado": "#8fd7c8",
+  "Espacio_Publico": "#8fd7c8",
+  "Equipamiento_Cultural": "#a276f2",
+  "Seguridad": "#d9824e",
+  "Clasificacion_Suelo": "#8e877f",
+  "Habitabilidad_Informalidad": "#e89a6c",
+  "Gobernanza_Instrumentos": "#a276f2"
 };
 
 let zoom = 1, panX = 0, panY = 0;
@@ -540,61 +553,45 @@ let selectedNode = null;
 let hiddenNodes = new Set();
 
 function getNode(id) { return nodes.find(n => n.id === id); }
-function getNodeConnections(id) {
-  return edges.filter(e => e.from === id || e.to === id);
-}
-function isHub(id) {
-  return getNodeConnections(id).length >= 3;
-}
+function getNodeConnections(id) { return edges.filter(e => e.from === id || e.to === id); }
+function isHub(id) { return getNodeConnections(id).length >= 4; }
 
 function calculateLayout() {
   const hubs = nodes.filter(n => isHub(n.id));
   const others = nodes.filter(n => !isHub(n.id));
   const layout = {};
-  const centerX = 500, centerY = 350;
+  const centerX = 600, centerY = 400;
   
   hubs.forEach((hub, i) => {
     const angle = (i / hubs.length) * Math.PI * 2 - Math.PI / 2;
-    const radius = 120;
-    layout[hub.id] = {
-      x: centerX + Math.cos(angle) * radius,
-      y: centerY + Math.sin(angle) * radius
-    };
+    const radius = 180;
+    layout[hub.id] = { x: centerX + Math.cos(angle) * radius, y: centerY + Math.sin(angle) * radius };
   });
   
   others.forEach((node, i) => {
     const connections = getNodeConnections(node.id);
     let avgX = centerX, avgY = centerY;
     if (connections.length > 0) {
-      const connectedNodes = connections.map(c => {
-        const otherId = c.from === node.id ? c.to : c.from;
-        return getNode(otherId);
-      }).filter(Boolean);
-      if (connectedNodes.length > 0) {
-        avgX = connectedNodes.reduce((sum, n) => sum + (layout[n.id]?.x || centerX), 0) / connectedNodes.length;
-        avgY = connectedNodes.reduce((sum, n) => sum + (layout[n.id]?.y || centerY), 0) / connectedNodes.length;
+      const connected = connections.map(c => getNode(c.from === node.id ? c.to : c.from)).filter(Boolean);
+      if (connected.length > 0) {
+        avgX = connected.reduce((s, n) => s + (layout[n.id]?.x || centerX), 0) / connected.length;
+        avgY = connected.reduce((s, n) => s + (layout[n.id]?.y || centerY), 0) / connected.length;
       }
     }
     const angle = (i / others.length) * Math.PI * 2;
-    const radius = 220 + Math.random() * 60;
-    layout[node.id] = {
-      x: avgX + Math.cos(angle) * radius * 0.5,
-      y: avgY + Math.sin(angle) * radius * 0.5
-    };
+    const radius = 320 + (i % 3) * 60;
+    layout[node.id] = { x: avgX + Math.cos(angle) * radius * 0.4, y: avgY + Math.sin(angle) * radius * 0.4 };
   });
   
-  for (let i = 0; i < 100; i++) {
+  for (let i = 0; i < 150; i++) {
     nodes.forEach(node => {
-      const conns = getNodeConnections(node.id);
-      conns.forEach(conn => {
+      getNodeConnections(node.id).forEach(conn => {
         const otherId = conn.from === node.id ? conn.to : conn.from;
-        const other = layout[otherId];
-        const current = layout[node.id];
+        const other = layout[otherId], current = layout[node.id];
         if (other && current) {
-          const dx = other.x - current.x;
-          const dy = other.y - current.y;
+          const dx = other.x - current.x, dy = other.y - current.y;
           const dist = Math.hypot(dx, dy) || 1;
-          const minDist = 100;
+          const minDist = 80;
           if (dist < minDist) {
             const push = (minDist - dist) * 0.02;
             current.x -= (dx / dist) * push;
@@ -604,7 +601,6 @@ function calculateLayout() {
       });
     });
   }
-  
   return layout;
 }
 
@@ -612,59 +608,36 @@ function render() {
   const layout = calculateLayout();
   const edgesLayer = document.getElementById('edgesLayer');
   const nodesLayer = document.getElementById('nodesLayer');
-  
   edgesLayer.innerHTML = '';
   nodesLayer.innerHTML = '';
   
   edges.forEach((edge, i) => {
-    const from = layout[edge.from];
-    const to = layout[edge.to];
+    const from = layout[edge.from], to = layout[edge.to];
     if (!from || !to) return;
-    
-    const dx = to.x - from.x;
-    const dy = to.y - from.y;
+    const dx = to.x - from.x, dy = to.y - from.y;
     const dist = Math.hypot(dx, dy) || 1;
-    const ux = dx / dist;
-    const uy = dy / dist;
-    
-    const fromNode = getNode(edge.from);
-    const toNode = getNode(edge.to);
-    const fromRadius = isHub(edge.from) ? 40 : 28;
-    const toRadius = isHub(edge.to) ? 40 : 28;
-    
-    const x1 = from.x + ux * fromRadius;
-    const y1 = from.y + uy * fromRadius;
-    const x2 = to.x - ux * (toRadius + 8);
-    const y2 = to.y - uy * (toRadius + 8);
-    
-    const color = edgeColorMap[edge.type] || '#888';
+    const ux = dx / dist, uy = dy / dist;
+    const fromR = isHub(edge.from) ? 22 : 14;
+    const toR = isHub(edge.to) ? 22 : 14;
+    const x1 = from.x + ux * fromR, y1 = from.y + uy * fromR;
+    const x2 = to.x - ux * (toR + 6), y2 = to.y - uy * (toR + 6);
     const isHidden = hiddenNodes.has(edge.from) || hiddenNodes.has(edge.to);
     
     const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-    line.setAttribute('x1', x1);
-    line.setAttribute('y1', y1);
-    line.setAttribute('x2', x2);
-    line.setAttribute('y2', y2);
-    line.setAttribute('stroke', color);
-    line.setAttribute('stroke-width', edge.type === 'habilita' ? 2.5 : edge.type === 'impide' ? 2 : 1.5);
-    line.setAttribute('stroke-dasharray', edge.type === 'mixta' ? '5,5' : 'none');
-    line.setAttribute('opacity', isHidden ? 0 : 0.7);
+    line.setAttribute('x1', x1); line.setAttribute('y1', y1);
+    line.setAttribute('x2', x2); line.setAttribute('y2', y2);
+    line.setAttribute('stroke', '#888');
+    line.setAttribute('stroke-width', '1');
+    line.setAttribute('opacity', isHidden ? 0 : 0.4);
     line.setAttribute('class', 'network-edge');
-    line.setAttribute('data-edge-index', i);
-    line.style.cursor = 'pointer';
-    line.addEventListener('click', (e) => {
-      e.stopPropagation();
-      highlightConnection(edge.from, edge.to);
-    });
     edgesLayer.appendChild(line);
   });
   
   nodes.forEach(node => {
     const pos = layout[node.id];
     if (!pos) return;
-    
-    const color = colorMap[node.tipo] || '#888';
-    const radius = isHub(node.id) ? 40 : 28;
+    const color = typeColors[node.type] || '#888';
+    const radius = isHub(node.id) ? 22 : 14;
     const isHidden = hiddenNodes.has(node.id);
     
     const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
@@ -676,71 +649,54 @@ function render() {
     circle.setAttribute('r', radius);
     circle.setAttribute('fill', '#0b0c0f');
     circle.setAttribute('stroke', color);
-    circle.setAttribute('stroke-width', isHub(node.id) ? 3 : 2);
+    circle.setAttribute('stroke-width', isHub(node.id) ? 2.5 : 1.5);
     g.appendChild(circle);
     
     if (isHub(node.id)) {
       const halo = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
-      halo.setAttribute('r', radius + 6);
+      halo.setAttribute('r', radius + 4);
       halo.setAttribute('fill', 'none');
       halo.setAttribute('stroke', color);
-      halo.setAttribute('stroke-width', 1);
-      halo.setAttribute('stroke-dasharray', '3,3');
-      halo.setAttribute('opacity', 0.5);
+      halo.setAttribute('stroke-width', 0.5);
+      halo.setAttribute('stroke-dasharray', '2,2');
+      halo.setAttribute('opacity', 0.4);
       g.appendChild(halo);
     }
     
     const icon = document.createElementNS('http://www.w3.org/2000/svg', 'text');
     icon.setAttribute('text-anchor', 'middle');
-    icon.setAttribute('dy', '5');
+    icon.setAttribute('dy', '4');
     icon.setAttribute('fill', color);
-    icon.setAttribute('font-size', isHub(node.id) ? '16' : '12');
+    icon.setAttribute('font-size', isHub(node.id) ? '10' : '7');
     icon.setAttribute('font-family', 'Font Awesome 6 Free');
     icon.setAttribute('font-weight', '900');
-    icon.textContent = '\uf015';
+    const iconMap = {"fa-water":"\uf773","fa-tree":"\uf1bb","fa-shield-halved":"\uf3ed","fa-faucet-drip":"\uf043","fa-triangle-exclamation":"\uf071","fa-flood-water":"\uf773","fa-train-subway":"\uf239","fa-road":"\uf018","fa-warehouse":"\uf494","fa-bicycle":"\uf206","fa-bus":"\uf207","fa-truck-fast":"\uf48b","fa-store":"\uf54e","fa-industry":"\uf275","fa-server":"\uf233","fa-recycle":"\uf1b8","fa-hands-holding-child":"\uf4be","fa-hospital":"\uf0f8","fa-school":"\uf549","fa-book-open":"\uf518","fa-map":"\uf279","fa-house-chimney":"\uf66f","fa-scale-balanced":"\uf24e","fa-hand-holding-dollar":"\uf4c0","fa-building":"\uf1ad","fa-handshake":\uf2b5","fa-users":"\uf0c0"};
+    icon.textContent = iconMap[node.icon] || '\uf111';
     g.appendChild(icon);
-    
-    const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-    text.setAttribute('text-anchor', 'middle');
-    text.setAttribute('dy', radius + 16);
-    text.setAttribute('fill', '#f2ece3');
-    text.setAttribute('font-size', '10');
-    text.setAttribute('font-weight', '700');
-    text.textContent = node.id;
-    g.appendChild(text);
     
     const label = document.createElementNS('http://www.w3.org/2000/svg', 'text');
     label.setAttribute('text-anchor', 'middle');
-    label.setAttribute('dy', radius + 28);
-    label.setAttribute('fill', '#8e877f');
-    label.setAttribute('font-size', '8');
-    label.textContent = node.label.length > 35 ? node.label.substring(0, 35) + '...' : node.label;
+    label.setAttribute('dy', radius + 10);
+    label.setAttribute('fill', '#f2ece3');
+    label.setAttribute('font-size', isHub(node.id) ? '8' : '6');
+    label.setAttribute('font-weight', '600');
+    label.textContent = node.id;
     g.appendChild(label);
     
-    g.addEventListener('click', (e) => {
-      e.stopPropagation();
-      selectNode(node.id);
-    });
-    
-    g.addEventListener('mouseenter', (e) => {
-      showTooltip(e, node);
-    });
-    
-    g.addEventListener('mouseleave', () => {
-      hideTooltip();
-    });
-    
+    g.addEventListener('click', (e) => { e.stopPropagation(); selectNode(node.id); });
+    g.addEventListener('mouseenter', (e) => showTooltip(e, node));
+    g.addEventListener('mouseleave', hideTooltip);
     nodesLayer.appendChild(g);
   });
   
   updateStats();
   renderTogglePanel();
+  renderLegend();
 }
 
 function renderTogglePanel() {
   const panel = document.getElementById('togglePanel');
   panel.innerHTML = '';
-  
   nodes.forEach(node => {
     const isActive = !hiddenNodes.has(node.id);
     const btn = document.createElement('button');
@@ -751,92 +707,63 @@ function renderTogglePanel() {
   });
 }
 
+function renderLegend() {
+  const panel = document.getElementById('legendPanel');
+  panel.innerHTML = '';
+  Object.entries(typeColors).forEach(([type, color]) => {
+    const item = document.createElement('div');
+    item.className = 'legend-item';
+    item.innerHTML = `<div class="legend-swatch" style="background:${color}"></div>${type.replace(/_/g, ' ')}`;
+    panel.appendChild(item);
+  });
+}
+
 function toggleNode(nodeId) {
-  if (hiddenNodes.has(nodeId)) {
-    hiddenNodes.delete(nodeId);
-  } else {
-    hiddenNodes.add(nodeId);
-  }
+  if (hiddenNodes.has(nodeId)) hiddenNodes.delete(nodeId);
+  else hiddenNodes.add(nodeId);
   render();
 }
 
 function selectNode(nodeId) {
   selectedNode = selectedNode === nodeId ? null : nodeId;
   render();
-  
   const details = document.getElementById('nodeDetails');
   if (!selectedNode) {
     details.innerHTML = '<h3><i class="fa-solid fa-crosshairs"></i> Inspección del nodo</h3><p>Haz clic en un nodo para ver sus conexiones y detalles.</p>';
     return;
   }
-  
   const node = getNode(selectedNode);
   const connections = getNodeConnections(selectedNode);
-  const isHubNode = isHub(selectedNode);
-  
   let html = `<h3><i class="fa-solid fa-crosshairs"></i> Inspección del nodo</h3>`;
-  html += `<h4><i class="fa-solid ${node.icon}" style="color:${colorMap[node.tipo]};margin-right:6px"></i>${node.id} · ${node.label}</h4>`;
-  html += `<span class="node-type ${node.tipo.toLowerCase()}">${node.tipo}</span>`;
-  html += `<div class="node-rol ${node.rol.toLowerCase()}"><strong>Rol:</strong> ${node.rol}</div>`;
-  html += `<div class="node-rol"><strong>Conexiones:</strong> ${connections.length}</div>`;
-  if (isHubNode) {
-    html += `<div class="node-rol" style="border-left-color:#f5c945"><strong>Hub:</strong> Nodo con alta conectividad</div>`;
-  }
-  
+  html += `<h4><i class="fa-solid ${node.icon}" style="color:${typeColors[node.type]};margin-right:6px"></i>${node.id}</h4>`;
+  html += `<p style="font-size:10px;color:var(--muted);margin-bottom:8px">${node.label}</p>`;
+  html += `<span class="node-type" style="background:${typeColors[node.type]}22;color:${typeColors[node.type]}">${node.type.replace(/_/g, ' ')}</span>`;
+  html += `<div style="font-size:10px;margin-top:8px"><strong>Conexiones:</strong> ${connections.length}</div>`;
+  if (isHub(node.id)) html += `<div style="font-size:10px;color:var(--yellow);margin-top:4px"><i class="fa-solid fa-star"></i> Hub de red</div>`;
   if (connections.length > 0) {
     html += `<ul class="connections-list">`;
     connections.forEach(conn => {
       const otherId = conn.from === selectedNode ? conn.to : conn.from;
-      const other = getNode(otherId);
-      const icon = conn.type === 'habilita' ? 'fa-arrow-right' : conn.type === 'impide' ? 'fa-ban' : 'fa-exchange-alt';
-      html += `<li><i class="fa-solid ${icon}" style="color:${edgeColorMap[conn.type]}"></i> ${other.id} · ${conn.type}</li>`;
+      html += `<li><i class="fa-solid fa-arrow-right" style="color:${typeColors[node.type]}"></i> ${otherId}</li>`;
     });
     html += `</ul>`;
   }
-  
   details.innerHTML = html;
-}
-
-function highlightConnection(fromId, toId) {
-  document.querySelectorAll('.network-edge').forEach(edge => {
-    const idx = edge.getAttribute('data-edge-index');
-    const conn = edges[parseInt(idx)];
-    if (conn && ((conn.from === fromId && conn.to === toId) || (conn.from === toId && conn.to === fromId))) {
-      edge.classList.add('highlight');
-    } else {
-      edge.classList.add('dimmed');
-    }
-  });
-  
-  setTimeout(() => {
-    document.querySelectorAll('.network-edge').forEach(edge => {
-      edge.classList.remove('highlight', 'dimmed');
-    });
-  }, 2000);
 }
 
 function filterNodes() {
   const search = document.getElementById('searchInput').value.toLowerCase();
   const typeFilter = document.getElementById('typeFilter').value;
-  const rolFilter = document.getElementById('rolFilter').value;
   const minConn = parseInt(document.getElementById('minConn').value);
-  
   document.getElementById('minConnLabel').textContent = minConn;
-  
   hiddenNodes.clear();
-  
   nodes.forEach(node => {
     const conns = getNodeConnections(node.id).length;
     const matchSearch = node.label.toLowerCase().includes(search) || node.id.toLowerCase().includes(search);
-    const matchType = typeFilter === 'all' || node.tipo === typeFilter;
-    const matchRol = rolFilter === 'all' || node.rol === rolFilter;
+    const matchType = typeFilter === 'all' || node.type === typeFilter;
     const matchConn = conns >= minConn;
-    
-    if (!matchSearch || !matchType || !matchRol || !matchConn) {
-      hiddenNodes.add(node.id);
-    }
+    if (!matchSearch || !matchType || !matchConn) hiddenNodes.add(node.id);
   });
-  
   render();
 }
 
@@ -846,7 +773,6 @@ function updateStats() {
   const hubs = visibleNodes.filter(n => isHub(n.id)).length;
   const maxEdges = visibleNodes.length * (visibleNodes.length - 1) / 2;
   const density = maxEdges > 0 ? Math.round((visibleEdges.length / maxEdges) * 100) : 0;
-  
   document.getElementById('statNodes').textContent = visibleNodes.length;
   document.getElementById('statEdges').textContent = visibleEdges.length;
   document.getElementById('statHubs').textContent = hubs;
@@ -856,66 +782,41 @@ function updateStats() {
 function showTooltip(event, node) {
   const tooltip = document.getElementById('tooltip');
   const conns = getNodeConnections(node.id);
-  tooltip.innerHTML = `<strong><i class="fa-solid ${node.icon}" style="margin-right:4px"></i>${node.id} · ${node.tipo}</strong><span>${node.label}</span><span style="color:${colorMap[node.rol]}">Rol: ${node.rol}</span><span>${conns.length} conexiones${isHub(node.id) ? ' · Hub' : ''}</span>`;
+  tooltip.innerHTML = `<strong><i class="fa-solid ${node.icon}" style="margin-right:4px"></i>${node.id}</strong><span>${node.label}</span><span>${conns.length} conexiones${isHub(node.id) ? ' · Hub' : ''}</span>`;
   tooltip.style.left = (event.clientX + 12) + 'px';
   tooltip.style.top = (event.clientY + 12) + 'px';
   tooltip.classList.add('visible');
 }
-
-function hideTooltip() {
-  document.getElementById('tooltip').classList.remove('visible');
-}
-
+function hideTooltip() { document.getElementById('tooltip').classList.remove('visible'); }
 function zoomIn() { zoom = Math.min(zoom * 1.2, 3); applyTransform(); }
 function zoomOut() { zoom = Math.max(zoom / 1.2, 0.3); applyTransform(); }
 function zoomReset() { zoom = 1; panX = 0; panY = 0; applyTransform(); }
-function resetView() { zoomReset(); hiddenNodes.clear(); selectedNode = null; document.getElementById('searchInput').value = ''; document.getElementById('typeFilter').value = 'all'; document.getElementById('rolFilter').value = 'all'; document.getElementById('minConn').value = 0; render(); }
-
-function applyTransform() {
-  const svg = document.getElementById('networkSvg');
-  svg.style.transform = `scale(${zoom}) translate(${panX}px, ${panY}px)`;
-}
-
+function resetView() { zoomReset(); hiddenNodes.clear(); selectedNode = null; document.getElementById('searchInput').value = ''; document.getElementById('typeFilter').value = 'all'; document.getElementById('minConn').value = 0; render(); }
+function applyTransform() { document.getElementById('networkSvg').style.transform = `scale(${zoom}) translate(${panX}px, ${panY}px)`; }
 function exportSVG() {
   const svg = document.getElementById('networkSvg');
-  const serializer = new XMLSerializer();
-  const source = serializer.serializeToString(svg);
-  const blob = new Blob([source], {type: 'image/svg+xml'});
-  const url = URL.createObjectURL(blob);
+  const blob = new Blob([new XMLSerializer().serializeToString(svg)], {type: 'image/svg+xml'});
   const a = document.createElement('a');
-  a.href = url;
+  a.href = URL.createObjectURL(blob);
   a.download = 'red-kennedy.svg';
   a.click();
 }
 
-let isPanning = false;
-let startX, startY;
-
+let isPanning = false, startX, startY;
 const svg = document.getElementById('networkSvg');
-svg.addEventListener('mousedown', (e) => {
-  if (e.target === svg || e.target.tagName === 'svg') {
-    isPanning = true;
-    startX = e.clientX - panX;
-    startY = e.clientY - panY;
-  }
-});
-
-svg.addEventListener('mousemove', (e) => {
-  if (isPanning) {
-    panX = e.clientX - startX;
-    panY = e.clientY - startY;
-    applyTransform();
-  }
-});
-
+svg.addEventListener('mousedown', (e) => { if (e.target === svg) { isPanning = true; startX = e.clientX - panX; startY = e.clientY - panY; } });
+svg.addEventListener('mousemove', (e) => { if (isPanning) { panX = e.clientX - startX; panY = e.clientY - startY; applyTransform(); } });
 svg.addEventListener('mouseup', () => { isPanning = false; });
 svg.addEventListener('mouseleave', () => { isPanning = false; });
+svg.addEventListener('click', (e) => { if (e.target === svg) { selectedNode = null; render(); } });
 
-svg.addEventListener('click', (e) => {
-  if (e.target === svg || e.target.tagName === 'svg') {
-    selectedNode = null;
-    render();
-  }
+// Populate type filter
+const typeFilter = document.getElementById('typeFilter');
+Object.keys(typeColors).forEach(type => {
+  const opt = document.createElement('option');
+  opt.value = type;
+  opt.textContent = type.replace(/_/g, ' ');
+  typeFilter.appendChild(opt);
 });
 
 render();
